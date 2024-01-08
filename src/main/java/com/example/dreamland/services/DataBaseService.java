@@ -17,8 +17,7 @@ public class DataBaseService {
         this.databaseConnection = databaseConnection;
     }
 
-    public void printUsers() {
-        String query = "SELECT * FROM user";
+    public void insertQuery(String query) {
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

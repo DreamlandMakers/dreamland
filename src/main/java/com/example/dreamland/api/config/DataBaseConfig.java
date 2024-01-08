@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class DataBaseConfig {
     
     @Bean
+    @Scope("singleton")
     public Connection dataBaseConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -20,7 +22,7 @@ public class DataBaseConfig {
             return DriverManager.getConnection(url, username, password);
 
         } catch (Exception e) {
-            
+
             System.out.println(e);
             return null;
         }
