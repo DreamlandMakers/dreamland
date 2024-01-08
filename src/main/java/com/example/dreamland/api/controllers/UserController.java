@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dreamland.services.DataBaseService;
 import com.example.dreamland.services.UserService;
 
 @RestController
@@ -14,7 +15,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, DataBaseService dataBaseService) {
         this.userService = userService;
     }
     

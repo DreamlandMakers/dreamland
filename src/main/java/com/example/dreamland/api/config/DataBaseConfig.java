@@ -16,8 +16,11 @@ public class DataBaseConfig {
             String url = "jdbc:mysql://localhost:3306/dreamland";
             String username = "root";
             String password = "erzer641";
+
             return DriverManager.getConnection(url, username, password);
+
         } catch (Exception e) {
+            
             System.out.println(e);
             return null;
         }
