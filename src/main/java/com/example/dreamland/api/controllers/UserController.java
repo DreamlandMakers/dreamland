@@ -19,9 +19,9 @@ public class UserController {
     }
     
     @PostMapping("/signup")
-    public void signUp(@RequestParam String userName, String password) {
+    public String signUp(@RequestParam String userName, String password) {
         String responseMessage = userService.newUserSignUp(userName, password);
-        System.out.println(responseMessage);
+        return responseMessage;
     }
 
     @GetMapping("/login")
