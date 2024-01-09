@@ -1,9 +1,10 @@
 package com.example.dreamland.api.model;
 
 public class User {
-    
+
     private String userName;
     private String password;
+    private String email;
     private String name;
     private String surName;
     private String birthDate;
@@ -36,5 +37,9 @@ public class User {
 
     public int getNumberOfPets() {
         return this.numberOfPets;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 }

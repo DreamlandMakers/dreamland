@@ -30,4 +30,9 @@ public class UserController {
     public void logIn(@RequestParam String userName, String password) {
         userService.checkCrediantials(userName, password);
     }
+
+    @GetMapping("/test")
+    public String test(@RequestParam String userName) {
+        return userService.checkUserNameAvailability(userName);
+    }
 }
