@@ -13,9 +13,8 @@ import com.example.dreamland.api.model.User;
 @Service
 public class UserService {
 
-    private static final String FORMAT_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+    private static final String FORMAT_REGEX = ".{8,15}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(FORMAT_REGEX);
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(FORMAT_REGEX);
     private final Connection databaseConnection;
 
     @Autowired
@@ -26,39 +25,34 @@ public class UserService {
     public String newUserSignUp(User user) {
         // This will be filled with the neccesseray functions
         String userNameAv = checkUserNameAvailability(user.getUserName());
-        String emailAv = emailFormatCheck(user.getEmail());
         String passwordAv = passwordFormatCheck(user.getPassword());
         if (userNameAv == "") {
-            if (emailAv == "") {
-                if (passwordAv == "") {
-                    String query = "INSERT INTO user(username, password, name, surname, birth_date, sex, number_of_pets, email) "
-                            + "values (?, ?, ?, ?, ?, ?, ?, ?)";
-                    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-                        preparedStatement.setString(1, user.getUserName());
-                        preparedStatement.setString(2, user.getPassword());
-                        preparedStatement.setString(3, user.getName());
-                        preparedStatement.setString(4, user.getSurName());
-                        preparedStatement.setString(5, user.getBirthDate());
-                        preparedStatement.setString(6, user.getSex());
-                        preparedStatement.setInt(7, user.getNumberOfPets());
-                        preparedStatement.setString(8, user.getEmail());
+            if (passwordAv == "") {
+                String query = "INSERT INTO user(username, password, name, surname, birth_date, sex, number_of_pets) "
+                        + "values (?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                    preparedStatement.setString(1, user.getUserName());
+                    preparedStatement.setString(2, user.getPassword());
+                    preparedStatement.setString(3, user.getName());
+                    preparedStatement.setString(4, user.getSurName());
+                    preparedStatement.setString(5, user.getBirthDate());
+                    preparedStatement.setString(6, user.getSex());
+                    preparedStatement.setInt(7, user.getNumberOfPets());
 
-                        int rowsAffected = preparedStatement.executeUpdate();
+                    int rowsAffected = preparedStatement.executeUpdate();
 
-                        if (rowsAffected > 0) {
-                            return "Sign Up Successfull";
-                        } else {
-                            return "Failed to Sign Up";
-                        }
-                    } catch (Exception e) {
-                        return e.toString();
+                    if (rowsAffected > 0) {
+                        return "Sign Up Successfull";
+                    } else {
+                        return "Failed to Sign Up";
                     }
-                } else {
-                    return passwordAv;
+                } catch (Exception e) {
+                    return e.toString();
                 }
             } else {
-                return emailAv;
+                return passwordAv;
             }
+
         } else {
             return userNameAv;
         }
@@ -102,16 +96,26 @@ public class UserService {
         }
     }
 
-    private String emailFormatCheck(String email) {
-        if (EMAIL_PATTERN.matcher(email).matches()) {
-            return "";
-        } else {
-            return "Invalid email";
+    public String logIn(String userName, String password) {
+        if (userName.length() < 15 && userName.length() > 5) {
+            if (password.length() > 7 && password.length() < 15) {
+                String query = "select * from user where username = ?";
+                    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                        preparedStatement.setString(1, userName);
+                        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                            if (resultSet.next()) {
+                                if (password.equals(resultSet.getString("password"))) {
+                                    return "Login Succesfull";
+                                }
+                            } else {
+                                return "Invalid Credentials";
+                            }
+                        }
+                    } catch (Exception e) {
+                        return e.toString();
+                    }
+            }
         }
-    }
-
-    public boolean checkCrediantials(String userName, String password) {
-        // Fill the function
-        return false;
+        return "Invalid Credentials";
     }
 }

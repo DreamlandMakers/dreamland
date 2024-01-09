@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dreamland.api.model.User;
+import com.example.dreamland.api.model.jsonconverters.CredentialConverter;
 import com.example.dreamland.services.UserService;
 
 @RestController
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public void logIn(@RequestParam String userName, String password) {
-        userService.checkCrediantials(userName, password);
+    public String logIn(@RequestBody CredentialConverter credentials) {
+        return userService.logIn(credentials.getUserName(), credentials.getPassword());
     }
 
     @GetMapping("/test")
