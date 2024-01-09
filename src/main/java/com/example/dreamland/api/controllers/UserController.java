@@ -33,6 +33,6 @@ public class UserController {
 
     @GetMapping("/test")
     public String test(@RequestParam String userName) {
-        return userService.checkUserNameAvailability(userName);
+        return "";
     }
 }
