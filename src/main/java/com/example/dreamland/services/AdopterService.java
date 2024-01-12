@@ -20,10 +20,12 @@ public class AdopterService {
     }
 
     public String adoptPet(int userId, PetIdConverter petId) {
-        String query = "update pet set adopter_id = ? where pet_id = ?";
-        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        if (isAdopter(userId)) {
+            String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ?";
+            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
-                preparedStatement.setInt(2, petId.getPetId());
+                preparedStatement.setString(2, java.time.LocalDate.now().toString());
+                preparedStatement.setInt(3, petId.getPetId());
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
@@ -35,6 +37,9 @@ public class AdopterService {
             } catch (Exception e) {
                 return e.toString();
             }
+        } else {
+            return "Not an adopter";
+        }
     }
 
     public String newAdopterRegister(int userId, double salary) {

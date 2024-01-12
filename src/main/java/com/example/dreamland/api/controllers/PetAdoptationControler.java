@@ -10,24 +10,24 @@ import com.example.dreamland.api.model.Pet;
 import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
 import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 import com.example.dreamland.services.AdopterService;
-import com.example.dreamland.services.PetAdoptationService;
+import com.example.dreamland.services.OwnerService;
 import com.example.dreamland.services.UserService;
 
 @RestController
 public class PetAdoptationControler {
     
-    private PetAdoptationService adoptationService;
+    private OwnerService ownerService;
     private AdopterService adopterService;
 
     @Autowired
-    public PetAdoptationControler(PetAdoptationService adoptationService, AdopterService adopterService) {
-        this.adoptationService = adoptationService;
+    public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService) {
+        this.ownerService = ownerService;
         this.adopterService = adopterService;
     }
 
     @PostMapping("/listNewPet")
     public String listYourPet(@RequestBody Pet pet) {
-        String responseMessage = adoptationService.newPetRegister(pet);
+        String responseMessage = ownerService.newPetRegister(pet);
         return responseMessage;
     }
     
@@ -46,9 +46,9 @@ public class PetAdoptationControler {
         return responseMessage;
     }
 
-    @PostMapping("/adoptNewPet")
+    @PostMapping("/adoptNewPet") //When a user adopts a new pet calls this endpoint with the petid as a json body
     public String adoptNewPet(@RequestBody PetIdConverter petId) {
-        adopterService.adoptPet(UserService.currentUserID, petId);
-        return "";
+        String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
+        return responseMessage;
     }
 }

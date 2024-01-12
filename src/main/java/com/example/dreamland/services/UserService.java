@@ -13,7 +13,7 @@ import com.example.dreamland.api.model.User;
 @Service
 public class UserService {
 
-    public static int currentUserID = 22; // This is just a temp value for testing
+    public static int currentUserID = 23; // This is just a temp value for testing
     private static final String FORMAT_REGEX = ".{8,15}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(FORMAT_REGEX);
     private final Connection databaseConnection;
