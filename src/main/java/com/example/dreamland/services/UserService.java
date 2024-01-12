@@ -13,12 +13,13 @@ import com.example.dreamland.api.model.User;
 @Service
 public class UserService {
 
+    public static int currentUserID = 22; // This is just a temp value for testing
     private static final String FORMAT_REGEX = ".{8,15}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(FORMAT_REGEX);
     private final Connection databaseConnection;
 
     @Autowired
-    public UserService(Connection databaseConnection, DataBaseService dataBaseService) {
+    public UserService(Connection databaseConnection) {
         this.databaseConnection = databaseConnection;
     }
 
@@ -58,6 +59,30 @@ public class UserService {
         }
     }
 
+    public String logIn(String userName, String password) {
+        if (userName.length() < 15 && userName.length() > 5) {
+            if (password.length() > 7 && password.length() < 15) {
+                String query = "select * from user where username = ?";
+                try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                    preparedStatement.setString(1, userName);
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        if (resultSet.next()) {
+                            if (password.equals(resultSet.getString("password"))) {
+                                currentUserID = resultSet.getInt("id");
+                                return "Login Succesfull";
+                            }
+                        } else {
+                            return "Invalid Credentials";
+                        }
+                    }
+                } catch (Exception e) {
+                    return e.toString();
+                }
+            }
+        }
+        return "Invalid Credentials";
+    }
+
     private String checkUserNameAvailability(String userName) {
         // Check if username is suitable and if it is not existing in the database
         if (userName.length() < 15) {
@@ -94,28 +119,5 @@ public class UserService {
         } else {
             return "Invalid password format";
         }
-    }
-
-    public String logIn(String userName, String password) {
-        if (userName.length() < 15 && userName.length() > 5) {
-            if (password.length() > 7 && password.length() < 15) {
-                String query = "select * from user where username = ?";
-                    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-                        preparedStatement.setString(1, userName);
-                        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                            if (resultSet.next()) {
-                                if (password.equals(resultSet.getString("password"))) {
-                                    return "Login Succesfull";
-                                }
-                            } else {
-                                return "Invalid Credentials";
-                            }
-                        }
-                    } catch (Exception e) {
-                        return e.toString();
-                    }
-            }
-        }
-        return "Invalid Credentials";
     }
 }
