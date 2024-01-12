@@ -28,7 +28,7 @@ public class OwnerService {
             preparedStatement.setInt(1, UserService.currentUserID);
             preparedStatement.setInt(2, pet.getAge());
             preparedStatement.setString(3, pet.getType());
-            preparedStatement.setDouble(4, pet.getAverageExpense());
+            preparedStatement.setDouble(4, pet.getCost());
             preparedStatement.setString(5, pet.getBreed());
             preparedStatement.setString(6, pet.getName());
             preparedStatement.setInt(7, pet.getYearOfOwnership());

@@ -11,21 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
+import com.example.dreamland.api.model.jsonconverters.FosterConverter;
 import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 
 @Service
-public class AdopterService {
+public class FosterFamilyService {
 
     private final Connection databaseConnection;
 
     @Autowired
-    public AdopterService(Connection databaseConnection) {
+    public FosterFamilyService(Connection databaseConnection) {
         this.databaseConnection = databaseConnection;
     }
 
-    public String adoptPet(int userId, PetIdConverter petId) {
-        if (isAdopter(userId)) {
-            String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ?";
+    public String fosterPet(int userId, PetIdConverter petId) {
+        if (isFoster(userId)) {
+            String query = "update pet set foster_id = ? , foster_from_date = ? where pet_id = ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());
@@ -34,7 +35,7 @@ public class AdopterService {
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    return "Pet adopted";
+                    return "Pet is forwarded to the foster family";
                 } else {
                     return "Failed to adopt pet";
                 }
@@ -42,13 +43,38 @@ public class AdopterService {
                 return e.toString();
             }
         } else {
-            return "Not an adopter";
+            return "Not an foster family member";
         }
     }
 
-    public List<Pet> getAdoptablePetList() {
-        String query = "select pet_id, age, type, cost, breed, name from pet";
+    public String newFosterRegister(int userId, FosterConverter fosterConverter) {
+        if (!isFoster(userId)) {
+            String query = "INSERT INTO foster(id, salary, type) values (?, ?, ?)";
+            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setDouble(2, fosterConverter.getSalary());
+                preparedStatement.setString(3, fosterConverter.getType());
+
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return "New Foster created";
+                } else {
+                    return "Failed to create new foster";
+                }
+            } catch (Exception e) {
+                return e.toString();
+            }
+        } else {
+            return "already foster";
+        }
+    }
+
+    public List<Pet> getFosterPetList(int userId) {
+        String query = "select pet_id, age, type, cost, breed, name from pet" 
+            + " where type in (select type from foster where id = ?)";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {   
                 List<Pet> petList = new ArrayList<>();
                 while (resultSet.next()) {
@@ -70,34 +96,8 @@ public class AdopterService {
         }
     }
 
-    public List<Pet> getFilteredAdoptablePetList() {
-        return Collections.emptyList();
-    }
-
-    public String newAdopterRegister(int userId, double salary) {
-        if (!isAdopter(userId)) {
-            String query = "INSERT INTO adopter(id, salary) values (?, ?)";
-            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setDouble(2, salary);
-
-                int rowsAffected = preparedStatement.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    return "New Adopter created";
-                } else {
-                    return "Failed to create new adopter";
-                }
-            } catch (Exception e) {
-                return e.toString();
-            }
-        } else {
-            return "already adopter";
-        }
-    }
-
-    public boolean isAdopter(int userId) {
-        String query = "select id from user where id = ? AND id in (select id from adopter)";
+    public boolean isFoster(int userId) {
+        String query = "select id from user where id = ? AND id in (select id from foster)";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

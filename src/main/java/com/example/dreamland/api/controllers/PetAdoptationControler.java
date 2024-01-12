@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dreamland.api.model.Pet;
 import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
+import com.example.dreamland.api.model.jsonconverters.FosterConverter;
 import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 import com.example.dreamland.services.AdopterService;
+import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
 import com.example.dreamland.services.UserService;
 
@@ -18,11 +20,13 @@ public class PetAdoptationControler {
     
     private OwnerService ownerService;
     private AdopterService adopterService;
+    private FosterFamilyService fosterService;
 
     @Autowired
-    public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService) {
+    public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService) {
         this.ownerService = ownerService;
         this.adopterService = adopterService;
+        this.fosterService = fosterService;
     }
 
     @PostMapping("/listNewPet")
@@ -40,6 +44,15 @@ public class PetAdoptationControler {
         }
     }
 
+    @GetMapping("/fosterPet")
+    public String fosterPetScreen() {
+        if (fosterService.isFoster(UserService.currentUserID)) {
+            return "List of adoptable pets";
+        } else {
+            return "Become Foster Screen";
+        }
+    }
+
     @PostMapping("/becomeAdopter") // If user getting to the adopter page first time this endpoint will take salary input
     public String becomeAdopter(@RequestBody AdopterConverter adopterConverter) {
         String responseMessage = adopterService.newAdopterRegister(UserService.currentUserID, adopterConverter.getSalary());
@@ -50,5 +63,22 @@ public class PetAdoptationControler {
     public String adoptNewPet(@RequestBody PetIdConverter petId) {
         String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
         return responseMessage;
+    }
+
+    @PostMapping("/becomeFosterFamily")
+    public String becomeFosterFamily(@RequestBody FosterConverter fosterFamilyConverter) {
+        String responseMessage = fosterService.newFosterRegister(UserService.currentUserID, fosterFamilyConverter);
+        return responseMessage;
+    }
+
+    @PostMapping("/fosterNewPet")
+    public String fosterPet(@RequestBody PetIdConverter petId) {
+
+        return "";
+    }
+
+    @GetMapping("/test")
+    public void test() {
+        fosterService.getFosterPetList(UserService.currentUserID);
     }
 }
