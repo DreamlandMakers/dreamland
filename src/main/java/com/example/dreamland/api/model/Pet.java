@@ -10,6 +10,14 @@ public class Pet {
     private String breed;
     private int yearOfOwnership;  
 
+    public void setAverageExpense(double averageExpense) {
+        this.averageExpense = averageExpense;
+    }
+
+    public void setYearOfOwnership(int yearOfOwnership) {
+        this.yearOfOwnership = yearOfOwnership;
+    }
+
     public String getName() {
         return this.name;
     }

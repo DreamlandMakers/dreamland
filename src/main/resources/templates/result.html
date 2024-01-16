@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Result</title>
+</head>
+<body>
+    <h1>Sign Up Successful</h1>
+    
+    <p>Thank you for signing up, <span th:text="${user.surName}">Username</span>!</p>
+    
+    <p>User Details:</p>
+    <ul>
+        <li><strong>Username:</strong> <span th:text="${user.surName}">Username</span></li>
+        <li><strong>Email:</strong> <span th:text="${user.name}">Name</span></li>
+        <!-- Add other user details as needed -->
+    </ul>
+    
+    <!-- You can add more styling or elements as per your requirements -->
+    
+    <a href="/login">Login</a> <!-- Provide a link to the login page if needed -->
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,14 @@
             <button type="submit">Login</button>
         </form>
 
-        <button class="signup-button" onclick="window.location.href='signup.html'">Sign Up</button>
+    
+    </div>
+
+    <div>
+        <form action="/signup" method="get">
+            <button class="signup-button">Sign Up</button>
+        </form>
+        
     </div>
 </body>
 </html>
