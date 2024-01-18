@@ -3,11 +3,13 @@ package com.example.dreamland.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.dreamland.api.model.CurrentUser;
 import com.example.dreamland.api.model.User;
 
 @Service
@@ -69,6 +71,9 @@ public class UserService {
                         if (resultSet.next()) {
                             if (password.equals(resultSet.getString("password"))) {
                                 currentUserID = resultSet.getInt("id");
+                                System.out.println("Login Succesful");
+                    
+                                setCurrentUser(userName);
                                 return "Login Succesfull";
                             }
                         } else {
@@ -81,6 +86,30 @@ public class UserService {
             }
         }
         return "Invalid Credentials";
+    }
+
+    private void setCurrentUser(String userName) throws SQLException {
+
+        String query = "SELECT * FROM user WHERE username = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setString(1, userName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Set the current user instance
+                    User currentUser = new User();
+                    currentUser.setUserName(resultSet.getString("username"));
+                    currentUser.setPassword(resultSet.getString("password"));
+                    currentUser.setName(resultSet.getString("name"));
+                    currentUser.setSurName(resultSet.getString("surName"));
+                    currentUser.setBirthDate(resultSet.getString("birth_date"));
+                    currentUser.setSex(resultSet.getString("sex"));
+                    currentUser.setNumberOfPets(resultSet.getInt("number_of_pets"));
+                    
+                    // Set the current user instance in the CurrentUser class
+                    CurrentUser.setCurrentUser(currentUser);
+                }
+            }
+        }    
     }
 
     private String checkUserNameAvailability(String userName) {

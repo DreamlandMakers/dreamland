@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Page</title>
+</head>
+<body>
+
+    <!-- Access current user properties in your HTML using Thymeleaf -->
+    <h1>Welcome, <span th:text="${currentUser.name}"></span>!</h1>
+    <p>Surname: <span th:text="${currentUser.surName}"></span></p>
+
+    <!-- Other HTML content -->
+
+</body>
+</html>

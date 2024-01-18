@@ -49,7 +49,7 @@ public class AdopterService {
     public List<Pet> getAdoptablePetList() {
         String query = "select pet_id, age, type, cost, breed, name from pet";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {   
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Pet> petList = new ArrayList<>();
                 while (resultSet.next()) {
                     Pet pet = new Pet();
@@ -59,15 +59,17 @@ public class AdopterService {
                     pet.setCost(resultSet.getDouble("cost"));
                     pet.setBreed(resultSet.getString("breed"));
                     pet.setName(resultSet.getString("name"));
-    
+
                     petList.add(pet);
                 }
                 return petList;
             }
+
         } catch (Exception e) {
             e.setStackTrace(null);
             return Collections.emptyList();
         }
+
     }
 
     public List<Pet> getFilteredAdoptablePetList() {

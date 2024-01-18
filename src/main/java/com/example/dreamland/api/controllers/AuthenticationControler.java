@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+import com.example.dreamland.api.model.CurrentUser;
 import com.example.dreamland.api.model.User;
 import com.example.dreamland.api.model.jsonconverters.CredentialConverter;
 import com.example.dreamland.services.UserService;
@@ -45,5 +45,21 @@ public class AuthenticationControler {
     user.setBirthDate(year + "-" + month + "-" + day);
     userService.newUserSignUp(user);
     return "result";
+    }
+
+
+    @PostMapping("/login")
+    public String logIn(@RequestParam("userName") String userName, @RequestParam("password") String password, Model model) {
+
+
+        userService.logIn(userName, password);
+
+        User currentUser = CurrentUser.getCurrentUser();
+
+            // Add the current user to the model
+        model.addAttribute("currentUser", currentUser);
+    
+        return "profile"; // This is the name of your HTML file (without the .html extension) 
+    }
 }
-}
+
