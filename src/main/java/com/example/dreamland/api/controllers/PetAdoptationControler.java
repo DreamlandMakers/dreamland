@@ -1,6 +1,7 @@
 package com.example.dreamland.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
 import com.example.dreamland.services.UserService;
 
-@RestController
+@Controller
 public class PetAdoptationControler {
     
     private OwnerService ownerService;
@@ -29,8 +30,13 @@ public class PetAdoptationControler {
         this.fosterService = fosterService;
     }
 
+    @GetMapping("/listNewPet")
+    public String listPetPage(Pet pet) {
+        return "giveAwayPet";
+    }
+
     @PostMapping("/listNewPet")
-    public String listYourPet(@RequestBody Pet pet) {
+    public String listYourPet(Pet pet) {
         String responseMessage = ownerService.newPetRegister(pet);
         return responseMessage;
     }
