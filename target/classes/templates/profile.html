@@ -7,10 +7,18 @@
 <body>
 
     <!-- Access current user properties in your HTML using Thymeleaf -->
-    <h1>Welcome, <span th:text="${currentUser.name}"></span>!</h1>
-    <p>Surname: <span th:text="${currentUser.surName}"></span></p>
+    <h1>Welcome, <span th:text="${session.currentUser.name}"></span>!</h1>
+    <p>Surname: <span th:text="${session.currentUser.surName}"></span></p>
     <div>
         <form action="/listNewPet" method="get">
+            
+            <button type="submit">Give</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/adoptPet" method="get">
             
             <button type="submit">Adopt</button>
 

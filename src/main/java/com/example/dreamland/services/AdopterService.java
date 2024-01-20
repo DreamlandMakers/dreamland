@@ -17,6 +17,7 @@ import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 public class AdopterService {
 
     private final Connection databaseConnection;
+    private FosterFamilyService fosterFamilyService;
 
     @Autowired
     public AdopterService(Connection databaseConnection) {
@@ -47,7 +48,7 @@ public class AdopterService {
     }
 
     public List<Pet> getAdoptablePetList() {
-        String query = "select pet_id, age, type, cost, breed, name from pet";
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Pet> petList = new ArrayList<>();
@@ -56,9 +57,10 @@ public class AdopterService {
                     pet.setId(resultSet.getInt("pet_id"));
                     pet.setAge(resultSet.getInt("age"));
                     pet.setType(resultSet.getString("type"));
-                    pet.setCost(resultSet.getDouble("cost"));
+                    pet.setAverageExpense(resultSet.getDouble("cost"));
                     pet.setBreed(resultSet.getString("breed"));
                     pet.setName(resultSet.getString("name"));
+                    pet.setYearOfOwnership(resultSet.getInt("year_ownership"));
 
                     petList.add(pet);
                 }

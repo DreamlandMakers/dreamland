@@ -16,12 +16,18 @@ import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
 import com.example.dreamland.services.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+import java.util.ArrayList;
+
 @Controller
 public class PetAdoptationControler {
     
     private OwnerService ownerService;
     private AdopterService adopterService;
     private FosterFamilyService fosterService;
+    private List<Pet> petList = new ArrayList<>();
 
     @Autowired
     public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService) {
@@ -42,11 +48,16 @@ public class PetAdoptationControler {
     }
     
     @GetMapping("/adoptPet")
-    public String adoptPetScreen() {
+    public String adoptPetScreen(HttpSession session) {
         if (adopterService.isAdopter(UserService.currentUserID)) {
-            return "Adoptable Pet List"; // Load adoptable pet list
+            
+            petList = adopterService.getAdoptablePetList();
+
+            session.setAttribute("petList", petList);
+            
+            return "adoptPet"; // Load adoptable pet list
         } else {
-            return "Become Adopter Screen"; // Ask for salary
+            return "becomeAdopter"; // Ask for salary
         }
     }
 
@@ -60,9 +71,10 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/becomeAdopter") // If user getting to the adopter page first time this endpoint will take salary input
-    public String becomeAdopter(@RequestBody AdopterConverter adopterConverter) {
+    public String becomeAdopter(AdopterConverter adopterConverter) {
         String responseMessage = adopterService.newAdopterRegister(UserService.currentUserID, adopterConverter.getSalary());
-        return responseMessage;
+
+        return "profile";
     }
 
     @PostMapping("/adoptNewPet") //When a user adopts a new pet calls this endpoint with the petid as a json body

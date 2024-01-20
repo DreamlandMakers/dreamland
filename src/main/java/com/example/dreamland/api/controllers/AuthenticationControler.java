@@ -14,6 +14,8 @@ import com.example.dreamland.api.model.User;
 import com.example.dreamland.api.model.jsonconverters.CredentialConverter;
 import com.example.dreamland.services.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class AuthenticationControler {
     
@@ -49,7 +51,7 @@ public class AuthenticationControler {
 
 
     @PostMapping("/login")
-    public String logIn(@RequestParam("userName") String userName, @RequestParam("password") String password, Model model) {
+    public String logIn(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) {
 
 
         userService.logIn(userName, password);
@@ -57,7 +59,7 @@ public class AuthenticationControler {
         User currentUser = CurrentUser.getCurrentUser();
 
             // Add the current user to the model
-        model.addAttribute("currentUser", currentUser);
+        session.setAttribute("currentUser", currentUser);
     
         return "profile"; // This is the name of your HTML file (without the .html extension) 
     }
