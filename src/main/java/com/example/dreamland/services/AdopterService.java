@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
-import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 
 @Service
 public class AdopterService {
@@ -24,13 +23,13 @@ public class AdopterService {
         this.databaseConnection = databaseConnection;
     }
 
-    public String adoptPet(int userId, PetIdConverter petId) {
+    public String adoptPet(int userId, String petId) {
         if (isAdopter(userId)) {
             String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());
-                preparedStatement.setInt(3, petId.getPetId());
+                preparedStatement.setInt(3, Integer.parseInt(petId));
 
                 int rowsAffected = preparedStatement.executeUpdate();
 

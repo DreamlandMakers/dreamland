@@ -17,6 +17,14 @@
             <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
             <p>Breed: <span th:text="${pet.breed}"></span></p>
             <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
+            <form action="/adoptNewPet" method="post">
+                <label for="petId"></label>
+                <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
+                <label for="session"></label>
+                <input type="hidden"  id="session" name="session" th:value="${session}" required>
+                <button type="submit">Adopt</button>
+            </form>
+
         </div>
     </div>
 </div>

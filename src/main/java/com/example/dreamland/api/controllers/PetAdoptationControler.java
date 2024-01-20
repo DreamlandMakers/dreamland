@@ -97,9 +97,16 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/adoptNewPet") //When a user adopts a new pet calls this endpoint with the petid as a json body
-    public String adoptNewPet(@RequestBody PetIdConverter petId) {
+    public String adoptNewPet(String petId, HttpSession session) {
         String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
-        return responseMessage;
+        if(responseMessage.equals("Pet adopted")){
+            petList = adopterService.getAdoptablePetList();
+
+            session.setAttribute("petList", petList);
+            
+            return "adoptPet"; // Load adoptable pet list
+        }
+        return "adoptPet";
     }
 
     @PostMapping("/becomeFosterFamily")
