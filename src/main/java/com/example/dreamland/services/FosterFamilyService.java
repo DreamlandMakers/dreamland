@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
 import com.example.dreamland.api.model.jsonconverters.FosterConverter;
-import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 
 @Service
 public class FosterFamilyService {
@@ -24,13 +23,13 @@ public class FosterFamilyService {
         this.databaseConnection = databaseConnection;
     }
 
-    public String fosterPet(int userId, PetIdConverter petId) {
+    public String fosterPet(int userId, String petId) {
         if (isFoster(userId)) {
             String query = "update pet set foster_id = ? , foster_from_date = ? where pet_id = ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());
-                preparedStatement.setInt(3, petId.getPetId());
+                preparedStatement.setInt(3, Integer.parseInt(petId));
 
                 int rowsAffected = preparedStatement.executeUpdate();
 

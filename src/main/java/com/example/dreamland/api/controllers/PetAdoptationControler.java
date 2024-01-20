@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.dreamland.api.model.Pet;
 import com.example.dreamland.api.model.Report;
 import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
 import com.example.dreamland.api.model.jsonconverters.FosterConverter;
-import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 import com.example.dreamland.services.AdopterService;
 import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
@@ -116,9 +114,16 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/fosterNewPet")
-    public String fosterPet(@RequestBody PetIdConverter petId) {
+    public String fosterPet(String petId, HttpSession session) {
+        int userId=UserService.currentUserID;
+        String responseMessage = fosterService.fosterPet(userId, petId);
+        if (responseMessage.equals("Pet is forwarded to the foster family")) {
+            fosterList = fosterService.getFosterPetList(userId);
 
-        return "";
+            session.setAttribute("fosterList", fosterList);
+            return "fosterPet";
+        }
+        return  "fosterPet";
     }
 
     @GetMapping("/test")
