@@ -43,7 +43,7 @@ public class FosterFamilyService {
                 return e.toString();
             }
         } else {
-            return "Not an foster family member";
+            return "Not a foster family member";
         }
     }
 
@@ -71,8 +71,7 @@ public class FosterFamilyService {
     }
 
     public List<Pet> getFosterPetList(int userId) {
-        String query = "select pet_id, age, type, cost, breed, name from pet" 
-            + " where where adopter_id is null and where foster_id is null and type in (select type from foster where id = ?)";
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null and foster_id is null and type in (Select type from foster where id=?)";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {   

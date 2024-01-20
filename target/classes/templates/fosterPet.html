@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fosterable Pets</title>
+</head>
+<body>
+
+<!-- Check if the petList is not empty -->
+<div th:if="${not #lists.isEmpty(session.fosterList)}">
+    <!-- Iterate through the petList -->
+    <div th:each="pet : ${session.fosterList}">
+        <div>
+            <h2>Pet ID: <span th:text="${pet.id}"></span></h2>
+            <p>Name: <span th:text="${pet.name}"></span></p>
+            <p>Age: <span th:text="${pet.age}"></span></p>
+            <p>Type: <span th:text="${pet.type}"></span></p>
+            <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
+            <p>Breed: <span th:text="${pet.breed}"></span></p>
+            <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
+        </div>
+    </div>
+</div>
+<!-- Display a message if the petList is empty -->
+<div th:if="${#lists.isEmpty(session.fosterList)}">
+    <p>There is no adoptable pets</p>
+</div>
+
+</body>
+</html>
