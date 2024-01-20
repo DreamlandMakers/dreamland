@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.dreamland.api.model.Pet;
+import com.example.dreamland.api.model.Report;
 import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
 import com.example.dreamland.api.model.jsonconverters.FosterConverter;
 import com.example.dreamland.api.model.jsonconverters.PetIdConverter;
 import com.example.dreamland.services.AdopterService;
 import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
+import com.example.dreamland.services.ReportService;
 import com.example.dreamland.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,14 +28,16 @@ public class PetAdoptationControler {
     private OwnerService ownerService;
     private AdopterService adopterService;
     private FosterFamilyService fosterService;
+    private ReportService reportService;
     private List<Pet> petList = new ArrayList<>();
     private List<Pet> fosterList = new ArrayList<>();
 
     @Autowired
-    public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService) {
+    public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService, ReportService reportService) {
         this.ownerService = ownerService;
         this.adopterService = adopterService;
         this.fosterService = fosterService;
+        this.reportService = reportService;
     }
 
     @GetMapping("/listNewPet")
@@ -42,8 +46,19 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/listNewPet")
-    public String listYourPet(Pet pet) {
+    public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions) {
+        
         String responseMessage = ownerService.newPetRegister(pet);
+        
+
+        if (reportTitles != null && reportDescriptions != null) {
+            for (int i = 0; i < reportTitles.length; i++) {
+                Report report = new Report();
+                report.setType(reportTitles[i]);
+                report.setDescription(reportDescriptions[i]);
+                reportService.addReport(pet.getId(), report);
+            }
+        }
         return responseMessage;
     }
     

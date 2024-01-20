@@ -17,7 +17,7 @@ public class DataBaseConfig {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/dreamland";
             String username = "root";
-            String password = "1234";
+            String password = "Qwaszx.123";
 
             return DriverManager.getConnection(url, username, password);
 

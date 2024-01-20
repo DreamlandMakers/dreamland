@@ -5,6 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Give Away a Pet</title>
+    <script>
+        function addReport() {
+            var reportDiv = document.createElement("div");
+            
+            var titleLabel = document.createElement("label");
+            titleLabel.textContent = "Report Title:";
+            var titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.name = "reportTitles";
+            titleInput.required = true;
+
+            var descriptionLabel = document.createElement("label");
+            descriptionLabel.textContent = "Report Description:";
+            var descriptionInput = document.createElement("input");
+            descriptionInput.type = "text";
+            descriptionInput.name = "reportDescriptions";
+            descriptionInput.required = true;
+
+            reportDiv.appendChild(titleLabel);
+            reportDiv.appendChild(titleInput);
+            reportDiv.appendChild(descriptionLabel);
+            reportDiv.appendChild(descriptionInput);
+
+            var form = document.getElementById("petForm");
+            form.insertBefore(reportDiv, form.lastElementChild);
+        }
+    </script>
 </head>
 
 <body>
@@ -12,7 +39,7 @@
 
     <!-- Form to take inputs for a new pet -->
     <div>
-        <form action="/listNewPet" method="post">
+        <form id="petForm" action="/listNewPet" method="post">
             
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
@@ -31,6 +58,8 @@
 
             <label for="yearOfOwnership">Year of Ownership:</label>
             <input type="number" id="yearOfOwnership" name="yearOfOwnership" required>
+
+            <button type="button" onclick="addReport()">Add Report</button>
 
             <button type="submit">Give Away</button>
         </form>

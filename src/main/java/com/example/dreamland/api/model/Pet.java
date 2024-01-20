@@ -1,8 +1,25 @@
 package com.example.dreamland.api.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Pet {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    private String name;
+    private int age;
+    private String type;
+    private double averageExpense;
+    private String breed;
+    private int yearOfOwnership;  
+
+
     public int getId() {
         return id;
     }
@@ -45,11 +62,5 @@ public class Pet {
     public void setYearOfOwnership(int yearOfOwnership) {
         this.yearOfOwnership = yearOfOwnership;
     }
-    private String name;
-    private int age;
-    private String type;
-    private double averageExpense;
-    private String breed;
-    private int yearOfOwnership;  
-
+    
 }
