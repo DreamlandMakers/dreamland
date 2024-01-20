@@ -48,7 +48,7 @@ public class AdopterService {
     }
 
     public List<Pet> getAdoptablePetList() {
-        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet";
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Pet> petList = new ArrayList<>();
