@@ -31,7 +31,11 @@ public class AuthenticationControler {
     public String logIn() {
         return "login";
     }
-
+    
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
 
     @PostMapping("/signup")
     public String signUp(User user, 
