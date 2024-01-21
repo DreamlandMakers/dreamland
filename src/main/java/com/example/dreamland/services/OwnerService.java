@@ -168,5 +168,51 @@ public class OwnerService {
         return "Failed to update pet - General error";
     }
 }
+public String existingPetAbondon(int petId) {
+    String query = "UPDATE pet SET owner_id = adopter_id, adopter_id = NULL, adoption_date=NULL WHERE pet_id = ?";
+    
+    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        preparedStatement.setInt(1, petId);
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        if (rowsAffected > 0) {
+            return "Pet updated";
+        } else {
+            return "Failed to update pet";
+        }
+    } catch (SQLException e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - SQL error";
+    } catch (Exception e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - General error";
+    }
+}
+public String fosteredPetAbondon(int petId) {
+    String query = "UPDATE pet SET owner_id = foster_id, foster_id = NULL, foster_from_date=NULL WHERE pet_id = ?";
+    
+    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        preparedStatement.setInt(1, petId);
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+        if (rowsAffected > 0) {
+            return "Pet updated";
+        } else {
+            return "Failed to update pet";
+        }
+    } catch (SQLException e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - SQL error";
+    } catch (Exception e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - General error";
+    }
+}
 
 }

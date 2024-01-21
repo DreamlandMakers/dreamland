@@ -72,7 +72,33 @@ public class AdopterService {
         }
 
     }
+    public List<Pet> getAdoptedPets(int userId) {
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Pet> petList = new ArrayList<>();
+                while (resultSet.next()) {
+                    Pet pet = new Pet();
+                    pet.setId(resultSet.getInt("pet_id"));
+                    pet.setAge(resultSet.getInt("age"));
+                    pet.setType(resultSet.getString("type"));
+                    pet.setAverageExpense(resultSet.getDouble("cost"));
+                    pet.setBreed(resultSet.getString("breed"));
+                    pet.setName(resultSet.getString("name"));
+                    pet.setYearOfOwnership(resultSet.getInt("year_ownership"));
 
+                    petList.add(pet);
+                }
+                return petList;
+            }
+
+        } catch (Exception e) {
+            e.setStackTrace(null);
+            return Collections.emptyList();
+        }
+
+    }
     public List<Pet> getFilteredAdoptablePetList() {
         return Collections.emptyList();
     }

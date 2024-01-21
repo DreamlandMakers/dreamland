@@ -32,6 +32,10 @@
 <div th:if="${#lists.isEmpty(session.petList)}">
     <p>There is no adoptable pets</p>
 </div>
-
+<div>
+    <form action="/profile" method="get">
+        <button type="submit">Back</button>
+    </form>
+</div>
 </body>
 </html>

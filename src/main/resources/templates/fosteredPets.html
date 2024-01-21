@@ -17,12 +17,12 @@
             <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
             <p>Breed: <span th:text="${pet.breed}"></span></p>
             <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
-            <form action="/fosterNewPet" method="post">
+            <form action="/listFosteredPet" method="post">
                 <label for="petId"></label>
                 <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
                 <label for="session"></label>
                 <input type="hidden"  id="session" name="session" th:value="${session}" required>
-                <button type="submit">Foster</button>
+                <button type="submit">Give Away</button>
             </form>
         </div>
     </div>

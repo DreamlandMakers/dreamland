@@ -6,9 +6,9 @@
 <body>
 
 <!-- Check if the petList is not empty -->
-<div th:if="${not #lists.isEmpty(session.fosterList)}">
+<div th:if="${not #lists.isEmpty(session.adoptedPets)}">
     <!-- Iterate through the petList -->
-    <div th:each="pet : ${session.fosterList}">
+    <div th:each="pet : ${session.adoptedPets}">
         <div>
             <h2>Pet ID: <span th:text="${pet.id}"></span></h2>
             <p>Name: <span th:text="${pet.name}"></span></p>
@@ -17,19 +17,19 @@
             <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
             <p>Breed: <span th:text="${pet.breed}"></span></p>
             <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
-            <form action="/fosterNewPet" method="post">
+            <form action="/listExistingPet" method="post">
                 <label for="petId"></label>
                 <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
                 <label for="session"></label>
                 <input type="hidden"  id="session" name="session" th:value="${session}" required>
-                <button type="submit">Foster</button>
+                <button type="submit">Give Away</button>
             </form>
         </div>
     </div>
 </div>
 <!-- Display a message if the petList is empty -->
-<div th:if="${#lists.isEmpty(session.fosterList)}">
-    <p>There is no adoptable pets</p>
+<div th:if="${#lists.isEmpty(session.adoptedPets)}">
+    <p>There is no adopted pets</p>
 </div>
 <div>
     <form action="/profile" method="get">

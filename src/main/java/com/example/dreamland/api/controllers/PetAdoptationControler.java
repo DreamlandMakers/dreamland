@@ -64,6 +64,29 @@ public class PetAdoptationControler {
 
         return "givenPets";
     }
+    @PostMapping("/listExistingPet")
+    public String listExistingPet(String petId, HttpSession session) {
+        
+        String responseMessage = ownerService.existingPetAbondon(Integer.parseInt(petId));
+    
+        givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+        session.setAttribute("givenPets", givenPets);
+
+        return "givenPets";
+    }
+    @PostMapping("/listFosteredPet")
+    public String listFosteredPet(String petId, HttpSession session) {
+        
+        String responseMessage = ownerService.fosteredPetAbondon(Integer.parseInt(petId));
+    
+        givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+        session.setAttribute("givenPets", givenPets);
+
+        return "givenPets";
+    }
+
     @GetMapping("/listMyPets")
     public String listMyPets(HttpSession session) {
 
@@ -72,6 +95,24 @@ public class PetAdoptationControler {
         session.setAttribute("givenPets", givenPets);
 
         return "givenPets";
+    }
+    @GetMapping("/listMyAdoptedPets")
+    public String listMyAdoptedPets(HttpSession session) {
+
+        List<Pet> adoptedPets = adopterService.getAdoptedPets(UserService.currentUserID);
+
+        session.setAttribute("adoptedPets", adoptedPets);
+
+        return "adoptedPets";
+    }
+    @GetMapping("/listMyFosteredPets")
+    public String listMyFosteredPets(HttpSession session) {
+
+        fosterList = fosterService.getFosteredPets(UserService.currentUserID);
+
+        session.setAttribute("fosterList", fosterList);
+
+        return "fosteredPets";
     }
     @GetMapping("/adoptPet")
     public String adoptPetScreen(HttpSession session) {
