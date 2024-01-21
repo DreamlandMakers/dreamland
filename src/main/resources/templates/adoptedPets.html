@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Fosterable Pets</title>
+    <title>Adopted Pets</title>
     <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
 </head>
 <body>
 
 <div class="container">
-    <h1>Fosterable Pets</h1>
+    <h1>Your Adopted Pets</h1>
 
     <div th:if="${not #lists.isEmpty(session.adoptedPets)}">
         <table class="table">

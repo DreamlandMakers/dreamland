@@ -219,7 +219,7 @@ public class PetAdoptationControler {
 
             session.setAttribute("reportList", reportList);
 
-            session.setAttribute("prevPage", prevPage);
+            session.setAttribute("pet_id", prevPage);
 
             return "reportPage"; // Load adoptable pet list
     }
