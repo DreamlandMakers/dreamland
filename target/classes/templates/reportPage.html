@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reports</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
+</head>
+<body>
+
+<div class="container">
+    <h1>Report Info</h1>
+
+    <div th:if="${not #lists.isEmpty(session.reportList)}">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="report : ${session.reportList}">
+                    <td th:text="${report.id}"></td>
+                    <td th:text="${report.type}"></td>
+                    <td th:text="${report.description}"></td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(session.reportList)}" class="message">
+        <p>There are no reports for pet</p>
+    </div>
+
+    <div>
+        <button onclick="goBack()">Back</button>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

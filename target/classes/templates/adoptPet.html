@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Adoptable Pets</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
+</head>
+<body>
+
+<div class="container">
+    <h1>Adoptable Pets</h1>
+
+    <div th:if="${not #lists.isEmpty(session.petList)}">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Pet ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Type</th>
+                    <th>Cost</th>
+                    <th>Breed</th>
+                    <th>Years of Ownership</th>
+                    <th>Reports</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pet : ${session.petList}">
+                    <td th:text="${pet.id}"></td>
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.age}"></td>
+                    <td th:text="${pet.type}"></td>
+                    <td th:text="${pet.averageExpense}"></td>
+                    <td th:text="${pet.breed}"></td>
+                    <td th:text="${pet.yearOfOwnership}"></td>
+                    <td>
+                        <form action="/showReport" method="post">
+                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <input type="hidden" id="prevPage" name="prevPage" value="adoptPet" required>
+                            <button type="submit" class="button">Reports</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/adoptNewPet" method="post">
+                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <button type="submit" class="button">Adopt</button>
+                        </form>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(session.petList)}" class="message">
+        <p>There are no adoptable pets</p>
+    </div>
+
+    <div>
+        <button onclick="goBack()">Back</button>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

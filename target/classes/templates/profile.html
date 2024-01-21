@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+</head>
+<body>
+
+    <!-- Access current user properties in your HTML using Thymeleaf -->
+    <h1>Welcome, <span th:text="${session.currentUser.name}"></span>!</h1>
+    <p>Surname: <span th:text="${session.currentUser.surName}"></span></p>
+    <div>
+        <form action="/listNewPet" method="get">
+            
+            <button type="submit">Give</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/adoptPet" method="get">
+            
+            <button type="submit">Adopt</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/fosterPet" method="get">
+            
+            <button type="submit">Foster</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/listMyPets" method="get">
+            
+            <button type="submit">Given Pets</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/listMyAdoptedPets" method="get">
+            
+            <button type="submit">Adopted Pets</button>
+
+        </form>
+    </div>
+
+    <div>
+        <form action="/listMyFosteredPets" method="get">
+            
+            <button type="submit">Fostered Pets</button>
+
+        </form>
+    </div>
+    <!-- Other HTML content -->
+
+</body>
+</html>
