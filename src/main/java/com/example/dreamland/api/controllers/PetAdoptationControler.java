@@ -30,7 +30,7 @@ public class PetAdoptationControler {
     private List<Pet> petList = new ArrayList<>();
     private List<Pet> fosterList = new ArrayList<>();
     private List<Pet> givenPets = new ArrayList<>();
-
+    private List<Report> reportList = new ArrayList<>();
     @Autowired
     public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService, ReportService reportService) {
         this.ownerService = ownerService;
@@ -47,15 +47,16 @@ public class PetAdoptationControler {
     @PostMapping("/listNewPet")
     public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions, HttpSession session) {
         
-        String responseMessage = ownerService.newPetRegister(pet);
+        int petId = ownerService.newPetRegister(pet);
         
 
         if (reportTitles != null && reportDescriptions != null) {
             for (int i = 0; i < reportTitles.length; i++) {
                 Report report = new Report();
+                report.setId(reportService.getLastId());
                 report.setType(reportTitles[i]);
                 report.setDescription(reportDescriptions[i]);
-                reportService.addReport(pet.getId(), report);
+                reportService.addReport(petId, report);
             }
         }
         givenPets = ownerService.getGivenPets(UserService.currentUserID);
@@ -210,6 +211,17 @@ public class PetAdoptationControler {
             session.setAttribute("givenPets", givenPets);
             
             return "givenPets"; // Load adoptable pet list
+    }
+
+    @PostMapping("/showReport")
+    public String showReport(String petId, HttpSession session,String prevPage) {
+            reportList = adopterService.getPetReports(Integer.parseInt(petId));
+
+            session.setAttribute("reportList", reportList);
+
+            session.setAttribute("prevPage", prevPage);
+
+            return "reportPage"; // Load adoptable pet list
     }
 
     @GetMapping("/test")

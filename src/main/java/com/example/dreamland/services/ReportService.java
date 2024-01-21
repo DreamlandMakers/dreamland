@@ -2,6 +2,7 @@ package com.example.dreamland.services;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,22 @@ public class ReportService {
             return e.toString();
         }
     }
+    public int getLastId() {
+        int nextReportId=-1;
+        String query = "SELECT IFNULL(MAX(report_id), 0) + 1 FROM report";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+    
+            if (resultSet.next()) {
+                nextReportId = resultSet.getInt(1);
+            }
+            return nextReportId;
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            e.printStackTrace();
+            return -1; // or any other appropriate value
+        }
+    }
+    
 
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
+
 
 @Service
 public class OwnerService {
@@ -23,12 +25,11 @@ public class OwnerService {
         this.databaseConnection = databaseConnection;
     }
 
-    public String newPetRegister(Pet pet) {
-
-        manageOwnerStatus(UserService.currentUserID); // Check if user is owner
+    public int newPetRegister(Pet pet) {
+        manageOwnerStatus(UserService.currentUserID); // Check if user is the owner
         String query = "INSERT INTO pet(owner_id, age, type, cost, breed, name, year_ownership) "
-                + "values (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, UserService.currentUserID);
             preparedStatement.setInt(2, pet.getAge());
             preparedStatement.setString(3, pet.getType());
@@ -36,18 +37,30 @@ public class OwnerService {
             preparedStatement.setString(5, pet.getBreed());
             preparedStatement.setString(6, pet.getName());
             preparedStatement.setInt(7, pet.getYearOfOwnership());
-
+    
             int rowsAffected = preparedStatement.executeUpdate();
-
+    
             if (rowsAffected > 0) {
-                return "Pet is listed";
+                // Retrieve the generated keys
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        return generatedId;
+                    } else {
+                        // This should not happen, but handle it if it does
+                        throw new SQLException("Failed to get the generated pet ID.");
+                    }
+                }
             } else {
-                return "Failed to list the pet";
+                return -1; // Indicates failure
             }
         } catch (Exception e) {
-            return e.toString();
+            // Handle exceptions appropriately
+            e.printStackTrace();
+            return -1; // Indicates failure
         }
     }
+    
 
     public String manageOwnerStatus(int userId) {
         if (!isOwner(userId)) {

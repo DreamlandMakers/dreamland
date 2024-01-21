@@ -66,10 +66,13 @@
     </div>
 
     <div>
-        <form action="/profile" method="get">
-            <button type="submit">Back</button>
-        </form>
+        <button onclick="goBack()">Back</button>
     </div>
 </body>
 
 </html>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

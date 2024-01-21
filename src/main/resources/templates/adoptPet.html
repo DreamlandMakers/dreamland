@@ -20,6 +20,7 @@
                     <th>Cost</th>
                     <th>Breed</th>
                     <th>Years of Ownership</th>
+                    <th>Reports</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -33,11 +34,20 @@
                     <td th:text="${pet.breed}"></td>
                     <td th:text="${pet.yearOfOwnership}"></td>
                     <td>
+                        <form action="/showReport" method="post">
+                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <input type="hidden" id="prevPage" name="prevPage" value="adoptPet" required>
+                            <button type="submit" class="button">Reports</button>
+                        </form>
+                    </td>
+                    <td>
                         <form action="/adoptNewPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
                             <button type="submit" class="button">Adopt</button>
                         </form>
+                        
                     </td>
                 </tr>
             </tbody>
@@ -48,12 +58,15 @@
         <p>There are no adoptable pets</p>
     </div>
 
-    <div class="back-button">
-        <form action="/profile" method="get">
-            <button type="submit" class="button">Back</button>
-        </form>
+    <div>
+        <button onclick="goBack()">Back</button>
     </div>
 </div>
 
 </body>
 </html>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

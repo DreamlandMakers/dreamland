@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
+import com.example.dreamland.api.model.Report;
 
 @Service
 public class AdopterService {
@@ -72,6 +73,7 @@ public class AdopterService {
         }
 
     }
+
     public List<Pet> getAdoptedPets(int userId) {
         String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id = ?";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
@@ -99,6 +101,7 @@ public class AdopterService {
         }
 
     }
+
     public List<Pet> getFilteredAdoptablePetList() {
         return Collections.emptyList();
     }
@@ -142,21 +145,44 @@ public class AdopterService {
         }
 
     }
-    public String undoGiving(int petId) {
-            String query = "delete from pet where pet_id = ?";
-            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-                preparedStatement.setInt(1, petId);
-                int rowsAffected = preparedStatement.executeUpdate();
 
-                if (rowsAffected > 0) {
-                    return "Pet resurrected";
-                } else {
-                    return "Failed to resurrect pet";
-                }
-            } catch (Exception e) {
-                return e.toString();
+    public String undoGiving(int petId) {
+        String query = "delete from pet where pet_id = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, petId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return "Pet resurrected";
+            } else {
+                return "Failed to resurrect pet";
             }
+        } catch (Exception e) {
+            return e.toString();
         }
-    
+    }
+
+    public List<Report> getPetReports(int petId) {
+        String query = "select report_id, type, description from report where pet_id = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, petId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Report> reports = new ArrayList<>();
+                while (resultSet.next()) {
+                    Report report = new Report();
+                    report.setId(resultSet.getInt("report_id"));
+                    report.setType(resultSet.getString("type"));
+                    report.setDescription(resultSet.getString("description"));
+
+                    reports.add(report);
+                }
+                return reports;
+            }
+
+        } catch (Exception e) {
+            e.setStackTrace(null);
+            return Collections.emptyList();
+        }
+    }
 
 }
