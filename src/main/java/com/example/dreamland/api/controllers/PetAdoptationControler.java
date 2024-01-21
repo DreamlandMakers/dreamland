@@ -53,7 +53,7 @@ public class PetAdoptationControler {
         if (reportTitles != null && reportDescriptions != null) {
             for (int i = 0; i < reportTitles.length; i++) {
                 Report report = new Report();
-                report.setId(i);
+                report.setId(i+1);
                 report.setType(reportTitles[i]);
                 report.setDescription(reportDescriptions[i]);
                 reportService.addReport(petId, report);
@@ -203,8 +203,18 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/updatePet")
-    public String updatePet(Pet pet, HttpSession session) {
+    public String updatePet(Pet pet, String[] reportTitles, String[] reportDescriptions, HttpSession session) {
             ownerService.updatePet(pet);
+
+            if (reportTitles != null && reportDescriptions != null) {
+                for (int i = 0; i < reportTitles.length; i++) {
+                    Report report = new Report();
+                    report.setId(i+ reportService.getLastId(pet.getId()));
+                    report.setType(reportTitles[i]);
+                    report.setDescription(reportDescriptions[i]);
+                    reportService.addReport(pet.getId(), report);
+                }
+            }
 
             givenPets = ownerService.getGivenPets(UserService.currentUserID);
 

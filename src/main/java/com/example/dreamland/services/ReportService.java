@@ -41,22 +41,25 @@ public class ReportService {
             return e.toString();
         }
     }
-    public int getLastId() {
+    public int getLastId(int petId) {
         int nextReportId=-1;
-        String query = "SELECT IFNULL(MAX(report_id), 0) + 1 FROM report GROUP BY pet_id";
-        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        String query = "SELECT IFNULL(MAX(report_id), 0) + 1 FROM report Where pet_id =? ";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)){
+            preparedStatement.setInt(1, petId);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
     
             if (resultSet.next()) {
                 nextReportId = resultSet.getInt(1);
             }
             return nextReportId;
+        }
         } catch (Exception e) {
             // Handle exceptions appropriately
             e.printStackTrace();
             return -1; // or any other appropriate value
         }
     }
+    
 
     public Report getReport(int reportId,int petId)  {
         String query = "SELECT description, type FROM report Where report_id=? and pet_id=?";
