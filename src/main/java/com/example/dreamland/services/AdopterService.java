@@ -116,5 +116,21 @@ public class AdopterService {
         }
 
     }
+    public String undoGiving(int petId) {
+            String query = "delete from pet where pet_id = ?";
+            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                preparedStatement.setInt(1, petId);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return "Pet resurrected";
+                } else {
+                    return "Failed to resurrect pet";
+                }
+            } catch (Exception e) {
+                return e.toString();
+            }
+        }
+    
 
 }

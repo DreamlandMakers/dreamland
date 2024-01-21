@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Given Away Pets</title>
+</head>
+<body>
+
+<!-- Check if the petList is not empty -->
+<div th:if="${not #lists.isEmpty(session.givenPets)}">
+    <!-- Iterate through the petList -->
+    <h1>Your Given Away Pets</h1>
+    <div th:each="pet : ${session.givenPets}">
+        <div>
+            <h2>Pet ID: <span th:text="${pet.id}"></span></h2>
+            <p>Name: <span th:text="${pet.name}"></span></p>
+            <p>Age: <span th:text="${pet.age}"></span></p>
+            <p>Type: <span th:text="${pet.type}"></span></p>
+            <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
+            <p>Breed: <span th:text="${pet.breed}"></span></p>
+            <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
+            <p> </p>
+            <form action="/undoGiveAway" method="post">
+                <label for="petId"></label>
+                <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
+                <label for="session"></label>
+                <input type="hidden"  id="session" name="session" th:value="${session}" required>
+                <button type="submit">Undo Give Away</button>
+            </form>
+            <form action="/editPet" method="post">
+                <label for="petId"></label>
+                <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
+                <label for="session"></label>
+                <input type="hidden"  id="session" name="session" th:value="${session}" required>
+                <button type="submit">Edit Pet Info</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Display a message if the petList is empty -->
+<div th:if="${#lists.isEmpty(session.givenPets)}">
+    <p>There is no given pets</p>
+</div>
+
+<div>
+    <form action="/profile" method="get">
+        <button type="submit">Back</button>
+    </form>
+</div>
+
+</body>
+</html>

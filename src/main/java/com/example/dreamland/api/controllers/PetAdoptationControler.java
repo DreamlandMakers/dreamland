@@ -29,6 +29,7 @@ public class PetAdoptationControler {
     private ReportService reportService;
     private List<Pet> petList = new ArrayList<>();
     private List<Pet> fosterList = new ArrayList<>();
+    private List<Pet> givenPets = new ArrayList<>();
 
     @Autowired
     public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService, ReportService reportService) {
@@ -44,7 +45,7 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/listNewPet")
-    public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions) {
+    public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions, HttpSession session) {
         
         String responseMessage = ownerService.newPetRegister(pet);
         
@@ -57,7 +58,11 @@ public class PetAdoptationControler {
                 reportService.addReport(pet.getId(), report);
             }
         }
-        return responseMessage;
+        givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+        session.setAttribute("givenPets", givenPets);
+
+        return "givenPets";
     }
     
     @GetMapping("/adoptPet")
@@ -124,6 +129,38 @@ public class PetAdoptationControler {
             return "fosterPet";
         }
         return  "fosterPet";
+    }
+    @PostMapping("/undoGiveAway") //When a user adopts a new pet calls this endpoint with the petid as a json body
+    public String undoGiveAway(String petId, HttpSession session) {
+        String responseMessage = adopterService.undoGiving(Integer.parseInt(petId));
+        if(responseMessage.equals("Pet resurrected")){
+            givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+            session.setAttribute("givenPets", givenPets);
+            
+            return "givenPets"; // Load adoptable pet list
+        }
+        return "givenPets";
+    }
+
+    @PostMapping("/editPet")
+    public String editPetScreen(String petId, HttpSession session) {
+            Pet pet = ownerService.getPet(Integer.parseInt(petId));
+
+            session.setAttribute("pet", pet);
+            
+            return "editPet"; // Load adoptable pet list
+    }
+
+    @PostMapping("/updatePet")
+    public String updatePet(Pet pet, HttpSession session) {
+            ownerService.updatePet(pet);
+
+            givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+            session.setAttribute("givenPets", givenPets);
+            
+            return "givenPets"; // Load adoptable pet list
     }
 
     @GetMapping("/test")

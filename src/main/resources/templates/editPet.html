@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pet</title>
+    <script>
+        function addReport() {
+            var reportDiv = document.createElement("div");
+            
+            var titleLabel = document.createElement("label");
+            titleLabel.textContent = "Report Title:";
+            var titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.name = "reportTitles";
+            titleInput.required = true;
+
+            var descriptionLabel = document.createElement("label");
+            descriptionLabel.textContent = "Report Description:";
+            var descriptionInput = document.createElement("input");
+            descriptionInput.type = "text";
+            descriptionInput.name = "reportDescriptions";
+            descriptionInput.required = true;
+
+            reportDiv.appendChild(titleLabel);
+            reportDiv.appendChild(titleInput);
+            reportDiv.appendChild(descriptionLabel);
+            reportDiv.appendChild(descriptionInput);
+
+            var form = document.getElementById("petForm");
+            form.insertBefore(reportDiv, form.lastElementChild);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Edit Given Away Pet</h1>
+    <div th:each="pet : ${session.pet}">
+        <!-- Form to take inputs for a new pet -->
+        <form id="petForm" action="/updatePet" method="post">
+
+            <input type="hidden" id="id" name="id" placeholder="" th:value="${pet.id}" />
+            <!-- Name input -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="" th:value="${pet.name}" />
+    
+            <!-- Age input -->
+            <label for="age">Age:</label>
+            <input type="int" id="age" name="age" placeholder="" th:value="${pet.age}" />
+    
+            <!-- Type input -->
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" placeholder="" th:value="${pet.type}" />
+    
+            <!-- Cost input -->
+            <label for="cost">Cost:</label>
+            <input type="text" id="cost" name="cost" placeholder="" th:value="${pet.averageExpense}" />
+    
+            <!-- Breed input -->
+            <label for="breed">Breed:</label>
+            <input type="text" id="breed" name="breed" placeholder="" th:value="${pet.breed}" />
+    
+            <!-- Years of Ownership input -->
+            <label for="yearsOfOwnership">Years of Ownership:</label>
+            <input type="int" id="yearsOfOwnership" name="yearsOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
+    
+            <!-- Add Report button -->
+            <button type="button" onclick="addReport()">Add Report</button>
+            
+            <!-- Update button -->
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    
+    
+    
+
+    <div>
+        <form action="/profile" method="get">
+            <button type="submit">Cancel</button>
+        </form>
+    </div>
+</body>
+
+</html>
