@@ -2,40 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Adoptable Pets</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
 </head>
 <body>
 
-<!-- Check if the petList is not empty -->
-<div th:if="${not #lists.isEmpty(session.petList)}">
-    <!-- Iterate through the petList -->
-    <div th:each="pet : ${session.petList}">
-        <div>
-            <h2>Pet ID: <span th:text="${pet.id}"></span></h2>
-            <p>Name: <span th:text="${pet.name}"></span></p>
-            <p>Age: <span th:text="${pet.age}"></span></p>
-            <p>Type: <span th:text="${pet.type}"></span></p>
-            <p>Cost: <span th:text="${pet.averageExpense}"></span></p>
-            <p>Breed: <span th:text="${pet.breed}"></span></p>
-            <p>Years of Ownership: <span th:text="${pet.yearOfOwnership}"></span></p>
-            <form action="/adoptNewPet" method="post">
-                <label for="petId"></label>
-                <input type="hidden"  id="petId" name="petId" th:value="${pet.id}" required>
-                <label for="session"></label>
-                <input type="hidden"  id="session" name="session" th:value="${session}" required>
-                <button type="submit">Adopt</button>
-            </form>
+<div class="container">
+    <h1>Adoptable Pets</h1>
 
-        </div>
+    <div th:if="${not #lists.isEmpty(session.petList)}">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Pet ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Type</th>
+                    <th>Cost</th>
+                    <th>Breed</th>
+                    <th>Years of Ownership</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pet : ${session.petList}">
+                    <td th:text="${pet.id}"></td>
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.age}"></td>
+                    <td th:text="${pet.type}"></td>
+                    <td th:text="${pet.averageExpense}"></td>
+                    <td th:text="${pet.breed}"></td>
+                    <td th:text="${pet.yearOfOwnership}"></td>
+                    <td>
+                        <form action="/adoptNewPet" method="post">
+                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <button type="submit" class="button">Adopt</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(session.petList)}" class="message">
+        <p>There are no adoptable pets</p>
+    </div>
+
+    <div class="back-button">
+        <form action="/profile" method="get">
+            <button type="submit" class="button">Back</button>
+        </form>
     </div>
 </div>
-<!-- Display a message if the petList is empty -->
-<div th:if="${#lists.isEmpty(session.petList)}">
-    <p>There is no adoptable pets</p>
-</div>
-<div>
-    <form action="/profile" method="get">
-        <button type="submit">Back</button>
-    </form>
-</div>
+
 </body>
 </html>
