@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Report</title>
+</head>
+
+<body>
+    <h1>Edit Report</h1>
+    <div th:each="report : ${session.report}">
+        <!-- Form to take inputs for a new pet -->
+        <form id="reportForm" action="/updateReport" method="post">
+
+            <input type="hidden" id="id" name="id" placeholder="" th:value="${report.id}" />
+           
+            <!-- Type input -->
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" placeholder="" th:value="${report.type}" />
+    
+            <!-- Breed input -->
+            <label for="breed">Description:</label>
+            <input type="text" id="description" name="description" placeholder="" th:value="${report.description}" />
+            
+            <!-- Update button -->
+            <input type="hidden" id="petId" name="petId" th:value="${session.pet_id}" required>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    
+    
+    
+
+    <div>
+        <button onclick="goBack()">Back</button>
+    </div>
+</body>
+
+</html>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>

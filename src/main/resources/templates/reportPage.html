@@ -16,6 +16,7 @@
                     <th>Report ID</th>
                     <th>Type</th>
                     <th>Description</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +24,21 @@
                     <td th:text="${report.id}"></td>
                     <td th:text="${report.type}"></td>
                     <td th:text="${report.description}"></td>
+                    
+                    <td>
+                        <form action="/editReport" method="post">
+                            <input type="hidden" id="reportId" name="reportId" th:value="${report.id}" required>
+                            <input type="hidden" id="petId" name="petId" th:value="${session.pet_id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <button type="submit" class="button">Edit</button>
+                        </form>
+                        <form action="/deleteReport" method="post">
+                            <input type="hidden" id="reportId" name="reportId" th:value="${report.id}" required>
+                            <input type="hidden" id="petId" name="petId" th:value="${session.pet_id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <button type="submit" class="button">Delete</button>
+                        </form>
+                    </td>
                     <td>
                     </td>
                 </tr>

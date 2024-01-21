@@ -53,7 +53,7 @@ public class PetAdoptationControler {
         if (reportTitles != null && reportDescriptions != null) {
             for (int i = 0; i < reportTitles.length; i++) {
                 Report report = new Report();
-                report.setId(reportService.getLastId());
+                report.setId(i);
                 report.setType(reportTitles[i]);
                 report.setDescription(reportDescriptions[i]);
                 reportService.addReport(petId, report);
@@ -214,16 +214,44 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/showReport")
-    public String showReport(String petId, HttpSession session,String prevPage) {
+    public String showReport(String petId, HttpSession session) {
             reportList = adopterService.getPetReports(Integer.parseInt(petId));
 
             session.setAttribute("reportList", reportList);
 
-            session.setAttribute("pet_id", prevPage);
+            session.setAttribute("pet_id", Integer.parseInt(petId));
+
+            return "reportPage"; // Load adoptable pet list
+    }
+    @PostMapping("/editReport")
+    public String editReport(String reportId, String petId, HttpSession session) {
+            Report report = reportService.getReport(Integer.parseInt(reportId),Integer.parseInt(petId));
+            
+            session.setAttribute("report", report);
+            session.setAttribute("petId", petId);
+
+            return "updateReportPage"; // Load adoptable pet list
+    }
+
+    @PostMapping("/updateReport")
+    public String updateReport(Report report, String petId, HttpSession session) {
+        reportService.updateReport(report, Integer.parseInt(petId));
+
+            reportList = adopterService.getPetReports(Integer.parseInt(petId));
+            session.setAttribute("reportList", reportList);
 
             return "reportPage"; // Load adoptable pet list
     }
 
+    @PostMapping("/deleteReport")
+    public String deleteReport(String reportId, String petId, HttpSession session) {
+        reportService.deleteReport(Integer.parseInt(reportId), Integer.parseInt(petId));
+
+            reportList = adopterService.getPetReports(Integer.parseInt(petId));
+            session.setAttribute("reportList", reportList);
+
+            return "reportPage"; // Load adoptable pet list
+    }
     @GetMapping("/test")
     public void test() {
         fosterService.getFosterPetList(UserService.currentUserID);
