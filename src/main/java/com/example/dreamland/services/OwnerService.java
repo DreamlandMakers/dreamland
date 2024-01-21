@@ -3,6 +3,7 @@ package com.example.dreamland.services;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -138,25 +139,34 @@ public class OwnerService {
             return null;
         }
     }
-    public  String updatePet(Pet pet) {
-        String query = "update pet set name = ? , age = ?, type = ? , averageExpense = ?, breed = ? , yearOfOwnership = ?  where pet_id = ?";
-            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-                preparedStatement.setString(1, pet.getName());
-                preparedStatement.setInt(2, pet.getAge());
-                preparedStatement.setString(3, pet.getType());
-                preparedStatement.setDouble(4, pet.getAverageExpense());
-                preparedStatement.setString(5, pet.getBreed());
-                preparedStatement.setInt(6, pet.getYearOfOwnership());
+    public String updatePet(Pet pet) {
+    String query = "UPDATE pet SET name = ?, age = ?, type = ?, cost = ?, breed = ?, year_ownership = ?  WHERE pet_id = ?";
+    
+    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        preparedStatement.setString(1, pet.getName());
+        preparedStatement.setInt(2, pet.getAge());
+        preparedStatement.setString(3, pet.getType());
+        preparedStatement.setDouble(4, pet.getAverageExpense());
+        preparedStatement.setString(5, pet.getBreed());
+        preparedStatement.setInt(6, pet.getYearOfOwnership());
+        preparedStatement.setInt(7, pet.getId()); 
 
-                int rowsAffected = preparedStatement.executeUpdate();
+        int rowsAffected = preparedStatement.executeUpdate();
 
-                if (rowsAffected > 0) {
-                    return "Pet updated";
-                } else {
-                    return "Failed to update pet";
-                }
-            } catch (Exception e) {
-                return e.toString();
-            }
+        if (rowsAffected > 0) {
+            return "Pet updated";
+        } else {
+            return "Failed to update pet";
+        }
+    } catch (SQLException e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - SQL error";
+    } catch (Exception e) {
+        // Log the exception or print a more meaningful message
+        e.printStackTrace();
+        return "Failed to update pet - General error";
     }
+}
+
 }

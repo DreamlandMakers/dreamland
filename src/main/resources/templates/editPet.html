@@ -54,16 +54,16 @@
             <input type="text" id="type" name="type" placeholder="" th:value="${pet.type}" />
     
             <!-- Cost input -->
-            <label for="cost">Cost:</label>
-            <input type="text" id="cost" name="cost" placeholder="" th:value="${pet.averageExpense}" />
+            <label for="averageExpense">Cost:</label>
+            <input type="double" id="averageExpense" name="averageExpense" placeholder="" th:value="${pet.averageExpense}" />
     
             <!-- Breed input -->
             <label for="breed">Breed:</label>
             <input type="text" id="breed" name="breed" placeholder="" th:value="${pet.breed}" />
     
             <!-- Years of Ownership input -->
-            <label for="yearsOfOwnership">Years of Ownership:</label>
-            <input type="int" id="yearsOfOwnership" name="yearsOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
+            <label for="yearOfOwnership">Years of Ownership:</label>
+            <input type="int" id="yearOfOwnership" name="yearOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
     
             <!-- Add Report button -->
             <button type="button" onclick="addReport()">Add Report</button>

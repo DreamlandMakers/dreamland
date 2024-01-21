@@ -64,7 +64,15 @@ public class PetAdoptationControler {
 
         return "givenPets";
     }
-    
+    @GetMapping("/listMyPets")
+    public String listMyPets(HttpSession session) {
+
+        givenPets = ownerService.getGivenPets(UserService.currentUserID);
+
+        session.setAttribute("givenPets", givenPets);
+
+        return "givenPets";
+    }
     @GetMapping("/adoptPet")
     public String adoptPetScreen(HttpSession session) {
         if (adopterService.isAdopter(UserService.currentUserID)) {
