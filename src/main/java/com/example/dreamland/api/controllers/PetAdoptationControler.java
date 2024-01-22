@@ -1,6 +1,7 @@
 package com.example.dreamland.api.controllers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,8 +138,17 @@ public class PetAdoptationControler {
         if (adopterService.isAdopter(UserService.currentUserID)) {
             
             petList = adopterService.getAdoptablePetList();
-
-            session.setAttribute("petList", petList);
+            int numofPets=petList.size();
+            adoptedPetReports.clear();
+            for(int i =0;i<numofPets;i++){
+            int petId=petList.get(i).getId();
+            PetReport pr=new PetReport();
+            pr.setPet(petList.get(i));
+            List<Report> r= adopterService.getPetReports(petId);
+            pr.setReports(r);
+            adoptedPetReports.add(pr);
+        }
+            session.setAttribute("petList", adoptedPetReports);
             
             return "adoptPet"; // Load adoptable pet list
         } else {
@@ -166,18 +176,27 @@ public class PetAdoptationControler {
         return "profile";
     }
 
-    @PostMapping("/adoptNewPet") //When a user adopts a new pet calls this endpoint with the petid as a json body
-    public String adoptNewPet(String petId, HttpSession session) {
-        String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
-        if(responseMessage.equals("Pet adopted")){
-            petList = adopterService.getAdoptablePetList();
+    @PostMapping("/adoptNewPet")
+public String adoptNewPet(String petId, HttpSession session) {
+    String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
 
-            session.setAttribute("petList", petList);
-            
-            return "adoptPet"; // Load adoptable pet list
+    if (responseMessage.equals("Pet adopted")) {
+        // Find and remove the adopted pet from the list
+        Iterator<PetReport> iterator = adoptedPetReports.iterator();
+        while (iterator.hasNext()) {
+            PetReport petReport = iterator.next();
+            if (petReport.getPet().getId() == Integer.parseInt(petId)) {
+                iterator.remove();
+                break;
+            }
         }
-        return "adoptPet";
+
+        session.setAttribute("petList", adoptedPetReports);
     }
+
+    return "adoptPet";
+}
+
 
     @PostMapping("/becomeFosterFamily")
     public String becomeFosterFamily(FosterConverter fosterFamilyConverter) {
