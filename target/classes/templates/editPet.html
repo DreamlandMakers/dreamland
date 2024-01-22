@@ -31,10 +31,46 @@
             var form = document.getElementById("petForm");
             form.insertBefore(reportDiv, form.lastElementChild);
         }
+
+        function updateBreedOptions() {
+            var typeSelect = document.getElementById('type');
+            var breedSelect = document.getElementById('breed');
+            var selectedType = typeSelect.value;
+            var selectedBreed = breedSelect.value;
+
+            // Clear current options
+            breedSelect.innerHTML = '';
+
+            // Add new options based on selected type
+            if (selectedType === 'dog') {
+                var dogBreeds = ['Golden Retriever', 'Terrier', 'Labrador', 'Street', 'Other'];
+                populateBreeds(dogBreeds, selectedBreed, breedSelect);
+            } else if (selectedType === 'cat') {
+                var catBreeds = ['Tekir', 'Orange', 'Calico', 'Street', 'Other'];
+                populateBreeds(catBreeds, selectedBreed, breedSelect);
+            } else if (selectedType === 'bird') {
+                var birdBreeds = ['Parrot', 'Blue Jay', 'Budgie', 'Street', 'Other'];
+                populateBreeds(birdBreeds, selectedBreed, breedSelect);
+            }
+        }
+
+        function populateBreeds(breeds, selectedBreed, breedSelect) {
+            for (var i = 0; i < breeds.length; i++) {
+                var option = document.createElement('option');
+                option.value = breeds[i];
+                option.text = breeds[i];
+                
+                // Set selected attribute if the breed matches the selected breed
+                option.selected = breeds[i] === selectedBreed;
+
+                breedSelect.add(option);
+            }
+        }
     </script>
+
 </head>
 
-<body>
+<body >
     <h1>Edit Pet</h1>
     <div th:each="pet : ${session.pet}">
         <!-- Form to take inputs for a new pet -->
@@ -50,11 +86,12 @@
             <input type="int" id="age" name="age" placeholder="" th:value="${pet.age}" />
     
             <!-- Type input -->
-            <select id="type" name="type" th:value="${pet.id}" required>
+            <label for="type">Type:</label>
+            <select id="type" name="type" th:value="${pet.type}" onchange="updateBreedOptions()"  required>
                 <option value="dog" th:selected="${pet.type == 'dog'}">Dog</option>
                 <option value="cat" th:selected="${pet.type == 'cat'}">Cat</option>
                 <option value="bird" th:selected="${pet.type == 'bird'}">Bird</option>
-                <option value="other" th:selected="${pet.type == 'other'}">Other</option>
+                <!--<option value="other" th:selected="${pet.type == 'other'}">Other</option>-->
             </select>
             
     
@@ -64,8 +101,11 @@
     
             <!-- Breed input -->
             <label for="breed">Breed:</label>
-            <input type="text" id="breed" name="breed" placeholder="" th:value="${pet.breed}" />
-    
+            <select id="breed" name="breed" th:value="${pet.breed}" onclick="updateBreedOptions()" required>
+                <option th:value="${pet.breed}" th:text="${pet.breed}"></option>
+
+            </select>
+            
             <!-- Years of Ownership input -->
             <label for="yearOfOwnership">Years of Ownership:</label>
             <input type="int" id="yearOfOwnership" name="yearOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
@@ -97,4 +137,4 @@
     function goBack() {
       window.history.back();
     }
-  </script>
+</script>

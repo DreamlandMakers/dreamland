@@ -32,6 +32,45 @@
             form.insertBefore(reportDiv, form.lastElementChild);
         }
     </script>
+    <script>
+        function updateBreedOptions() {
+            var typeSelect = document.getElementById('type');
+            var breedSelect = document.getElementById('breed');
+            var selectedType = typeSelect.value;
+
+            // Clear current options
+            breedSelect.innerHTML = '';
+
+            // Add new options based on selected type
+            if (selectedType === 'dog') {
+                var dogBreeds = ['Golden Retriever', 'Terrier', 'Labrador', 'Street','Other'];
+                for (var i = 0; i < dogBreeds.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = dogBreeds[i];
+                    option.text = dogBreeds[i];
+                    breedSelect.add(option);
+                }
+            }
+            else if (selectedType === 'cat') {
+                var catBreeds = ['Tekir', 'Orange', 'Calico','Street','Other'];
+                for (var i = 0; i < catBreeds.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = catBreeds[i];
+                    option.text = catBreeds[i];
+                    breedSelect.add(option);
+                }
+            }
+            else if (selectedType === 'bird') {
+                var birdBreeds = ['Parrot', 'Blue Jay', 'Budgie','Street','Other'];
+                for (var i = 0; i < birdBreeds.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = birdBreeds[i];
+                    option.text = birdBreeds[i];
+                    breedSelect.add(option);
+                }
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -48,21 +87,25 @@
             <input type="number" id="age" name="age" required>
 
             <label for="type">Type:</label>
-            <select id="type" name="type" required>
+            <select id="type" name="type" onchange="updateBreedOptions()" required>
+                <option value=""th:disabled="true" selected="true">Please select a type</option>
                 <option value="dog">Dog</option>
                 <option value="cat">Cat</option>
                 <option value="bird">Bird</option>
                 <!--<option value="fish">Fish</option>
                 <option value="hamster">Hamster</option>
-                <option value="gecko">Gecko</option>-->
-                <option value="other">Other</option>
+                <option value="gecko">Gecko</option>
+                <option value="other">Other</option>-->
             </select>
 
             <label for="averageExpense">Cost:</label>
             <input type="number" id="averageExpense" name="averageExpense" required>
 
             <label for="breed">Breed:</label>
-            <input type="text" id="breed" name="breed" required>
+            <select id="breed" name="breed" required>
+                <option value=""th:disabled="true" selected="true">Please select a breed</option>
+                <!-- Options will be dynamically added based on selected type -->
+            </select>
 
             <label for="yearOfOwnership">Year of Ownership:</label>
             <input type="number" id="yearOfOwnership" name="yearOfOwnership" required>
