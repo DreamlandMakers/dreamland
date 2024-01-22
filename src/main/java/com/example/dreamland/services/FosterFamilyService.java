@@ -16,7 +16,7 @@ import com.example.dreamland.api.model.Pet;
 public class FosterFamilyService {
 
     private final Connection databaseConnection;
-
+    private OwnerService ownerService;
     @Autowired
     public FosterFamilyService(Connection databaseConnection) {
         this.databaseConnection = databaseConnection;

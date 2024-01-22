@@ -18,7 +18,7 @@ public class AdopterService {
 
     private final Connection databaseConnection;
     private FosterFamilyService fosterFamilyService;
-
+    private OwnerService ownerService;
     @Autowired
     public AdopterService(Connection databaseConnection) {
         this.databaseConnection = databaseConnection;
@@ -36,6 +36,7 @@ public class AdopterService {
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
+                    
                     return "Pet adopted";
                 } else {
                     return "Failed to adopt pet";
@@ -175,21 +176,7 @@ public class AdopterService {
 
     }
 
-    public String undoGiving(int petId) {
-        String query = "delete from pet where pet_id = ?";
-        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-            preparedStatement.setInt(1, petId);
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                return "Pet resurrected";
-            } else {
-                return "Failed to resurrect pet";
-            }
-        } catch (Exception e) {
-            return e.toString();
-        }
-    }
+    
 
     public List<Report> getPetReports(int petId) {
         String query = "select report_id, type, description from report where pet_id = ?";

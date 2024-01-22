@@ -28,6 +28,7 @@ public class OwnerService {
 
     public int newPetRegister(Pet pet) {
         manageOwnerStatus(UserService.currentUserID); // Check if user is the owner
+        
         String query = "INSERT INTO pet(owner_id, age, type, cost, breed, name, year_ownership) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -46,6 +47,7 @@ public class OwnerService {
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int generatedId = generatedKeys.getInt(1);
+                        decreaseNumPets(UserService.currentUserID); // Check if user is the owner
                         return generatedId;
                     } else {
                         // This should not happen, but handle it if it does
@@ -83,7 +85,57 @@ public class OwnerService {
             return "already owner";
         }
     }
+    public String decreaseNumPets(int userId) {
+            String query = "UPDATE user SET number_of_pets = number_of_pets - 1 WHERE id = ?";
+            try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
 
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return "num decreased";
+                } else {
+                    return "Failed to decrease";
+                }
+            } catch (Exception e) {
+                return e.toString();
+            }
+        
+    }
+    public String increaseNumPets(int userId) {
+        String query = "UPDATE user SET number_of_pets = number_of_pets + 1 WHERE id = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return "num increased";
+            } else {
+                return "Failed to in";
+            }
+        } catch (Exception e) {
+            return e.toString();
+        }
+    
+}
+    
+    public int getNumPets(int userId) {
+        String query = "Select number_of_pets From  user  WHERE id = ?";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt("number_of_pets");
+            } else {
+                return -1;
+            }
+        }  }catch (Exception e) {
+            return -1;
+        }
+    
+}
     public boolean isOwner(int userId) {
         String query = "select id from user where id = ? AND id in (select id from owner)";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
@@ -187,15 +239,14 @@ public String existingPetAbondon(int petId) {
     
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);
-
-        int rowsAffected = preparedStatement.executeUpdate();
-
-        if (rowsAffected > 0) {
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+            decreaseNumPets(resultSet.getInt("owner_id"));
             return "Pet updated";
         } else {
             return "Failed to update pet";
         }
-    } catch (SQLException e) {
+    }} catch (SQLException e) {
         // Log the exception or print a more meaningful message
         e.printStackTrace();
         return "Failed to update pet - SQL error";
@@ -211,14 +262,14 @@ public String fosteredPetAbondon(int petId) {
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);
 
-        int rowsAffected = preparedStatement.executeUpdate();
-
-        if (rowsAffected > 0) {
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+            decreaseNumPets(resultSet.getInt("owner_id"));
             return "Pet updated";
         } else {
             return "Failed to update pet";
         }
-    } catch (SQLException e) {
+    }} catch (SQLException e) {
         // Log the exception or print a more meaningful message
         e.printStackTrace();
         return "Failed to update pet - SQL error";
@@ -293,6 +344,22 @@ private PetReport findPetReportById(List<PetReport> petReports, int petId) {
         }
     }
     return null;
+}
+
+public String undoGiving(int petId) {
+    String query = "delete from pet where pet_id = ?";
+    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        preparedStatement.setInt(1, petId);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+            increaseNumPets(resultSet.getInt("owner_id"));
+            return "Pet resurrected";
+        } else {
+            return "Failed to resurrect pet";
+        }
+    } }catch (Exception e) {
+        return e.toString();
+    }
 }
 
 }

@@ -47,8 +47,16 @@ public class PetAdoptationControler {
     }
 
     @PostMapping("/listNewPet")
+
     public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions, HttpSession session) {
-        
+        if(ownerService.getNumPets(UserService.currentUserID) <=0){
+            //you cant give more than the pets you own
+            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+            session.setAttribute("givenPetReports", givenPetReports);
+    
+            return "givenPets";
+        }
+
         int petId = ownerService.newPetRegister(pet);
         
 
@@ -204,6 +212,7 @@ public String adoptNewPet(String petId, HttpSession session) {
 
     if (responseMessage.equals("Pet adopted")) {
         // Find and remove the adopted pet from the list
+        ownerService.increaseNumPets(UserService.currentUserID);
         Iterator<PetReport> iterator = adoptedPetReports.iterator();
         while (iterator.hasNext()) {
             PetReport petReport = iterator.next();
@@ -231,6 +240,7 @@ public String adoptNewPet(String petId, HttpSession session) {
         int userId=UserService.currentUserID;
         String responseMessage = fosterService.fosterPet(userId, Integer.parseInt(petId));
         if (responseMessage.equals("Pet is forwarded to the foster family")) {
+            ownerService.increaseNumPets(UserService.currentUserID);
             Iterator<PetReport> iterator = adoptedPetReports.iterator();
             while (iterator.hasNext()) {
             PetReport petReport = iterator.next();
@@ -246,7 +256,7 @@ public String adoptNewPet(String petId, HttpSession session) {
     }
     @PostMapping("/undoGiveAway") //When a user adopts a new pet calls this endpoint with the petid as a json body
     public String undoGiveAway(String petId, HttpSession session) {
-        String responseMessage = adopterService.undoGiving(Integer.parseInt(petId));
+        String responseMessage = ownerService.undoGiving(Integer.parseInt(petId));
         if(responseMessage.equals("Pet resurrected")){
             givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
             session.setAttribute("givenPetReports", givenPetReports);
