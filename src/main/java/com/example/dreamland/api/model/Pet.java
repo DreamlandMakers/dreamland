@@ -9,7 +9,7 @@ public class Pet {
     private String type;
     private double averageExpense;
     private String breed;
-    private int yearOfOwnership;  
+    private int yearOfOwnership;
 
 
     public int getId() {

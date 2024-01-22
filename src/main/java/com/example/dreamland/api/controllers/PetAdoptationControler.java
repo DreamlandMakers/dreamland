@@ -33,6 +33,7 @@ public class PetAdoptationControler {
     private List<Pet> givenPets = new ArrayList<>();
     private List<Report> reportList = new ArrayList<>();
     List<PetReport> givenPetReports = new ArrayList<>();
+    List<PetReport> adoptedPetReports = new ArrayList<>();
     @Autowired
     public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService, ReportService reportService) {
         this.ownerService = ownerService;
@@ -98,10 +99,18 @@ public class PetAdoptationControler {
     }
     @GetMapping("/listMyAdoptedPets")
     public String listMyAdoptedPets(HttpSession session) {
-
         List<Pet> adoptedPets = adopterService.getAdoptedPets(UserService.currentUserID);
-
-        session.setAttribute("adoptedPets", adoptedPets);
+        int numofPets=adoptedPets.size();
+        adoptedPetReports.clear();
+        for(int i =0;i<numofPets;i++){
+            int petId=adoptedPets.get(i).getId();
+            PetReport pr=new PetReport();
+            pr.setPet(adoptedPets.get(i));
+            List<Report> r= adopterService.getPetReports(petId);
+            pr.setReports(r);
+            adoptedPetReports.add(pr);
+        }
+        session.setAttribute("adoptedPetReports", adoptedPetReports);
 
         return "adoptedPets";
     }
@@ -109,8 +118,17 @@ public class PetAdoptationControler {
     public String listMyFosteredPets(HttpSession session) {
 
         fosterList = fosterService.getFosteredPets(UserService.currentUserID);
-
-        session.setAttribute("fosterList", fosterList);
+        int numofPets=fosterList.size();
+        adoptedPetReports.clear();
+        for(int i =0;i<numofPets;i++){
+            int petId=fosterList.get(i).getId();
+            PetReport pr=new PetReport();
+            pr.setPet(fosterList.get(i));
+            List<Report> r= adopterService.getPetReports(petId);
+            pr.setReports(r);
+            adoptedPetReports.add(pr);
+        }
+        session.setAttribute("fosterList", adoptedPetReports);
 
         return "fosteredPets";
     }
@@ -214,10 +232,11 @@ public class PetAdoptationControler {
                 }
             }
 
-            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
-            session.setAttribute("givenPetReports", givenPetReports);
             
-            return "givenPets"; // Load adoptable pet list
+            //givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+            //session.setAttribute("givenPetReports", givenPetReports);
+            
+            return "profile"; // Load adoptable pet list
     }
 
     @PostMapping("/showReport")

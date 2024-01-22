@@ -9,7 +9,7 @@
 <div class="container">
     <h1>Your Adopted Pets</h1>
 
-    <div th:if="${not #lists.isEmpty(session.adoptedPets)}">
+    <div th:if="${not #lists.isEmpty(session.adoptedPetReports)}">
         <table class="table">
             <thead>
                 <tr>
@@ -25,25 +25,29 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="pet : ${session.adoptedPets}">
-                    <td th:text="${pet.id}"></td>
-                    <td th:text="${pet.name}"></td>
-                    <td th:text="${pet.age}"></td>
-                    <td th:text="${pet.type}"></td>
-                    <td th:text="${pet.averageExpense}"></td>
-                    <td th:text="${pet.breed}"></td>
-                    <td th:text="${pet.yearOfOwnership}"></td>
+                <tr th:each="petReport : ${session.adoptedPetReports}">
+                    <td th:text="${petReport.pet.id}"></td>
+                    <td th:text="${petReport.pet.name}"></td>
+                    <td th:text="${petReport.pet.age}"></td>
+                    <td th:text="${petReport.pet.type}"></td>
+                    <td th:text="${petReport.pet.averageExpense}"></td>
+                    <td th:text="${petReport.pet.breed}"></td>
+                    <td th:text="${petReport.pet.yearOfOwnership}"></td>
                     <td>
-                        <form action="/showReport" method="post">
-                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
-                            <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <input type="hidden" id="prevPage" name="prevPage" value="adoptedPets" required>
-                            <button type="submit" class="button">Reports</button>
-                        </form>
+                        <ul>
+                            <li th:each="report : ${petReport.reports}">
+                                <span th:text="${report.type}"></span> - <span th:text="${report.description}"></span>
+                            </li>
+                        </ul>
                     </td>
                     <td>
+                        <form action="/editPet" method="post">
+                            <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
+                            <input type="hidden" id="session" name="session" th:value="${session}" required>
+                            <button type="submit" class="button">Edit Pet Info</button>
+                        </form>
                         <form action="/listExistingPet" method="post">
-                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
                             <button type="submit" class="button">Give Away</button>
                         </form>
@@ -53,17 +57,13 @@
         </table>
     </div>
 
-    <div th:if="${#lists.isEmpty(session.adoptedPets)}" class="message">
+    <div th:if="${#lists.isEmpty(session.adoptedPetReports)}" class="message">
         <p>There are no adopted pets</p>
     </div>
     
     <div>
         <button onclick="goBack()">Back</button>
     </div>
-    
-
-
-
 </div>
 
 </body>
@@ -73,4 +73,4 @@
     function goBack() {
       window.history.back();
     }
-  </script>
+</script>
