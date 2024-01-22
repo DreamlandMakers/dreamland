@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
-import com.example.dreamland.api.model.jsonconverters.FosterConverter;
 
 @Service
 public class FosterFamilyService {
@@ -46,13 +45,13 @@ public class FosterFamilyService {
         }
     }
 
-    public String newFosterRegister(int userId, FosterConverter fosterConverter) {
+    public String newFosterRegister(int userId, double salary, String type) {
         if (!isFoster(userId)) {
             String query = "INSERT INTO foster(id, salary, type) values (?, ?, ?)";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
-                preparedStatement.setDouble(2, fosterConverter.getSalary());
-                preparedStatement.setString(3, fosterConverter.getType());
+                preparedStatement.setDouble(2, salary);
+                preparedStatement.setString(3, type);
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
@@ -160,5 +159,22 @@ public class FosterFamilyService {
         } catch (Exception e) {
             return false;
         }
+    }
+    public double fosterSalary(int userId) {
+        String query = "select salary from foster where id = ? ";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("salary");
+                } else {
+                    return -1;
+                }
+            }
+        } catch (Exception e) {
+            e.setStackTrace(null);
+            return -1;
+        }
+
     }
 }

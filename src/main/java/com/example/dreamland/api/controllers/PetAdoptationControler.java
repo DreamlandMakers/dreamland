@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.dreamland.api.model.Pet;
 import com.example.dreamland.api.model.PetReport;
 import com.example.dreamland.api.model.Report;
-import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
-import com.example.dreamland.api.model.jsonconverters.FosterConverter;
 import com.example.dreamland.services.AdopterService;
 import com.example.dreamland.services.FosterFamilyService;
 import com.example.dreamland.services.OwnerService;
@@ -152,6 +150,12 @@ public class PetAdoptationControler {
             
             return "adoptPet"; // Load adoptable pet list
         } else {
+            session.setAttribute("adopter", false);
+            if (fosterService.isFoster(UserService.currentUserID)) {
+                session.setAttribute("foster", true);
+                session.setAttribute("fosterSalary", fosterService.fosterSalary(UserService.currentUserID));
+                return "wannaBeBoth";
+            }
             return "becomeAdopter"; // Ask for salary
         }
     }
@@ -173,17 +177,23 @@ public class PetAdoptationControler {
             List<Report> r= adopterService.getPetReports(petId);
             pr.setReports(r);
             adoptedPetReports.add(pr);
-        }
+            }
             session.setAttribute("fosterList", adoptedPetReports);
             return "fosterPet";
         } else {
-            return "becomeFosterFamily";
+            session.setAttribute("foster", false);
+            if (adopterService.isAdopter(UserService.currentUserID)) {
+                session.setAttribute("adopter", true);
+                session.setAttribute("adopterSalary", adopterService.adopterSalary(UserService.currentUserID));
+                return "wannaBeBoth";
         }
+        return "becomeFosterFamily";
+    }
     }
 
     @PostMapping("/becomeAdopter") // If user getting to the adopter page first time this endpoint will take salary input
-    public String becomeAdopter(AdopterConverter adopterConverter) {
-        String responseMessage = adopterService.newAdopterRegister(UserService.currentUserID, adopterConverter.getSalary());
+    public String becomeAdopter(String salary) {
+        String responseMessage = adopterService.newAdopterRegister(UserService.currentUserID, Double.parseDouble(salary));
 
         return "profile";
     }
@@ -211,8 +221,8 @@ public String adoptNewPet(String petId, HttpSession session) {
 
 
     @PostMapping("/becomeFosterFamily")
-    public String becomeFosterFamily(FosterConverter fosterFamilyConverter) {
-        String responseMessage = fosterService.newFosterRegister(UserService.currentUserID, fosterFamilyConverter);
+    public String becomeFosterFamily(String salary, String type) {
+        String responseMessage = fosterService.newFosterRegister(UserService.currentUserID, Double.parseDouble(salary), type);
         return "profile";
     }
 

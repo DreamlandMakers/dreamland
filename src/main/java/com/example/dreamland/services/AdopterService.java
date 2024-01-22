@@ -213,5 +213,21 @@ public class AdopterService {
             return Collections.emptyList();
         }
     }
+    public double adopterSalary(int userId) {
+        String query = "select salary from adopter where id = ? ";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("salary");
+                } else {
+                    return -1;
+                }
+            }
+        } catch (Exception e) {
+            e.setStackTrace(null);
+            return -1;
+        }
 
+    }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopter and Foster Preference</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Do you want to be both an Adopter and a Foster?</h1>
+
+    <div id="container">
+        <td th:if="${session.foster}">
+            <form action="/becomeAdopter" method="post">
+                <input type="hidden" id="salary" name="salary" th:value="${session.fosterSalary}" required>
+                <input type="hidden" id="session" name="session" th:value="${session}" required>
+                <button type="submit" class="button">Yes</button>
+            </form>
+        </td>
+        <td th:if="${session.adopter}">
+            <form action="/becomeFosterFamily" method="post">
+                <input type="hidden" id="salary" name="salary" th:value="${session.adopterSalary}" required>
+
+                <label for="type">Type:</label>
+                <select id="type" name="type" required>
+                    <option value=""th:disabled="true" selected="true">Please select a pet type to foster</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                    <option value="bird">Bird</option>
+                    <!--<option value="fish">Fish</option>
+                    <option value="hamster">Hamster</option>
+                    <option value="gecko">Gecko</option>
+                    <option value="other">Other</option>-->
+                </select>
+                <input type="hidden" id="session" name="session" th:value="${session}" required>
+                <button type="submit" class="button">Yes</button>
+            </form>
+        </td>
+        <button onclick="handleNo()">No</button>
+    </div>
+
+    <script>
+        function handleNo() {
+            alert("You've chosen not to be both an Adopter and a Foster!");
+            // Redirect the user to the profile page
+            window.location.href = '/profile';
+        }
+    </script>
+</body>
+
+</html>
