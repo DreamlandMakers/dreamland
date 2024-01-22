@@ -24,14 +24,15 @@ public class AdopterService {
         this.databaseConnection = databaseConnection;
     }
 
-    public String adoptPet(int userId, String petId) {
-        if (isAdopter(userId)) {
-            String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ?";
+    public String adoptPet(int userId, int petId) {
+
+        if (isAdopter(userId) && canAdopt(userId,petId)) {
+            String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ? and owner_id != ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());
-                preparedStatement.setInt(3, Integer.parseInt(petId));
-
+                preparedStatement.setInt(3, petId);
+                preparedStatement.setInt(4, userId);
                 int rowsAffected = preparedStatement.executeUpdate();
 
                 if (rowsAffected > 0) {
@@ -44,6 +45,34 @@ public class AdopterService {
             }
         } else {
             return "Not an adopter";
+        }
+    }
+
+    private boolean canAdopt(int userId, int petId){
+        String query = "SELECT id\r\n" + //
+                "FROM adopter as a\r\n" + //
+                "WHERE a.id = ?\r\n" + //
+                "    AND a.salary - (SELECT cost FROM pet WHERE pet_id = ?) > (\r\n" + //
+                "        SELECT COALESCE(SUM(cost), 0)\r\n" + //
+                "        FROM pet\r\n" + //
+                "        WHERE (\r\n" + //
+                "            owner_id = a.id AND adopter_id IS NULL AND foster_id IS NULL\r\n" + //
+                "        ) OR adopter_id = a.id OR foster_id = a.id\r\n" + //
+                "    )\r\n" + //
+                "    AND a.id in (select id from user where TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) > 18 );\r\n" + //
+                "";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, petId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
         }
     }
 

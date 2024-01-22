@@ -206,7 +206,7 @@ public String existingPetAbondon(int petId) {
     }
 }
 public String fosteredPetAbondon(int petId) {
-    String query = "UPDATE pet SET owner_id = foster_id, foster_id = NULL, foster_from_date=NULL WHERE pet_id = ?";
+    String query = "UPDATE pet SET owner_id = foster_id, foster_id = NULL WHERE pet_id = ?";
     
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);

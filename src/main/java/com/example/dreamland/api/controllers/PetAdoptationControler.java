@@ -190,7 +190,7 @@ public class PetAdoptationControler {
 
     @PostMapping("/adoptNewPet")
 public String adoptNewPet(String petId, HttpSession session) {
-    String responseMessage = adopterService.adoptPet(UserService.currentUserID, petId);
+    String responseMessage = adopterService.adoptPet(UserService.currentUserID, Integer.parseInt(petId));
 
     if (responseMessage.equals("Pet adopted")) {
         // Find and remove the adopted pet from the list
@@ -219,7 +219,7 @@ public String adoptNewPet(String petId, HttpSession session) {
     @PostMapping("/fosterNewPet")
     public String fosterPet(String petId, HttpSession session) {
         int userId=UserService.currentUserID;
-        String responseMessage = fosterService.fosterPet(userId, petId);
+        String responseMessage = fosterService.fosterPet(userId, Integer.parseInt(petId));
         if (responseMessage.equals("Pet is forwarded to the foster family")) {
             Iterator<PetReport> iterator = adoptedPetReports.iterator();
             while (iterator.hasNext()) {

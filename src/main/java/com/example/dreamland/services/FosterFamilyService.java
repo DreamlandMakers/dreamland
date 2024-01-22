@@ -23,13 +23,13 @@ public class FosterFamilyService {
         this.databaseConnection = databaseConnection;
     }
 
-    public String fosterPet(int userId, String petId) {
-        if (isFoster(userId)) {
+    public String fosterPet(int userId, int petId) {
+        if (isFoster(userId)&canFoster(userId,petId)) {
             String query = "update pet set foster_id = ? , foster_from_date = ? where pet_id = ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());
-                preparedStatement.setInt(3, Integer.parseInt(petId));
+                preparedStatement.setInt(3, petId);
 
                 int rowsAffected = preparedStatement.executeUpdate();
 
@@ -133,5 +133,32 @@ public class FosterFamilyService {
             return false;
         }
 
+    }
+    private boolean canFoster(int userId, int petId){
+        String query = "SELECT id\r\n" + //
+                "FROM foster as f\r\n" + //
+                "WHERE f.id = ?\r\n" + //
+                "    AND f.salary - (SELECT cost FROM pet WHERE pet_id = ?) > (\r\n" + //
+                "        SELECT COALESCE(SUM(cost), 0)\r\n" + //
+                "        FROM pet\r\n" + //
+                "        WHERE (\r\n" + //
+                "            owner_id = f.id AND adopter_id IS NULL AND foster_id IS NULL\r\n" + //
+                "        ) OR adopter_id = f.id OR foster_id = f.id\r\n" + //
+                "    )\r\n" + //
+                "    AND f.id in (select id from user where TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) > 18 );\r\n" + //
+                "";
+        try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, petId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
