@@ -257,10 +257,11 @@ public String existingPetAbondon(int petId) {
     }
 }
 public String fosteredPetAbondon(int petId) {
-    String query = "UPDATE pet SET owner_id = foster_id, foster_id = NULL WHERE pet_id = ?";
+    String query = "UPDATE pet SET owner_id = foster_id, foster_id = NULL, foster_to_date = ? WHERE pet_id = ?";
     
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
-        preparedStatement.setInt(1, petId);
+        preparedStatement.setString(1, java.time.LocalDate.now().toString());
+        preparedStatement.setInt(2, petId);
 
         int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected>0) {
