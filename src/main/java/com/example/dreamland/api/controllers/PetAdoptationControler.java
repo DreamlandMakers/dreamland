@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.dreamland.api.model.Pet;
+import com.example.dreamland.api.model.PetReport;
 import com.example.dreamland.api.model.Report;
 import com.example.dreamland.api.model.jsonconverters.AdopterConverter;
 import com.example.dreamland.api.model.jsonconverters.FosterConverter;
@@ -31,6 +32,7 @@ public class PetAdoptationControler {
     private List<Pet> fosterList = new ArrayList<>();
     private List<Pet> givenPets = new ArrayList<>();
     private List<Report> reportList = new ArrayList<>();
+    List<PetReport> givenPetReports = new ArrayList<>();
     @Autowired
     public PetAdoptationControler(OwnerService ownerService, AdopterService adopterService, FosterFamilyService fosterService, ReportService reportService) {
         this.ownerService = ownerService;
@@ -59,9 +61,8 @@ public class PetAdoptationControler {
                 reportService.addReport(petId, report);
             }
         }
-        givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-        session.setAttribute("givenPets", givenPets);
+        givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+        session.setAttribute("givenPetReports", givenPetReports);
 
         return "givenPets";
     }
@@ -70,9 +71,8 @@ public class PetAdoptationControler {
         
         String responseMessage = ownerService.existingPetAbondon(Integer.parseInt(petId));
     
-        givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-        session.setAttribute("givenPets", givenPets);
+        givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+        session.setAttribute("givenPetReports", givenPetReports);
 
         return "givenPets";
     }
@@ -81,9 +81,8 @@ public class PetAdoptationControler {
         
         String responseMessage = ownerService.fosteredPetAbondon(Integer.parseInt(petId));
     
-        givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-        session.setAttribute("givenPets", givenPets);
+        givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+        session.setAttribute("givenPetReports", givenPetReports);
 
         return "givenPets";
     }
@@ -91,9 +90,9 @@ public class PetAdoptationControler {
     @GetMapping("/listMyPets")
     public String listMyPets(HttpSession session) {
 
-        givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-        session.setAttribute("givenPets", givenPets);
+        
+        givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+        session.setAttribute("givenPetReports", givenPetReports);
 
         return "givenPets";
     }
@@ -184,9 +183,8 @@ public class PetAdoptationControler {
     public String undoGiveAway(String petId, HttpSession session) {
         String responseMessage = adopterService.undoGiving(Integer.parseInt(petId));
         if(responseMessage.equals("Pet resurrected")){
-            givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-            session.setAttribute("givenPets", givenPets);
+            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+            session.setAttribute("givenPetReports", givenPetReports);
             
             return "givenPets"; // Load adoptable pet list
         }
@@ -216,9 +214,8 @@ public class PetAdoptationControler {
                 }
             }
 
-            givenPets = ownerService.getGivenPets(UserService.currentUserID);
-
-            session.setAttribute("givenPets", givenPets);
+            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+            session.setAttribute("givenPetReports", givenPetReports);
             
             return "givenPets"; // Load adoptable pet list
     }

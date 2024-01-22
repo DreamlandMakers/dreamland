@@ -64,17 +64,23 @@
             <!-- Years of Ownership input -->
             <label for="yearOfOwnership">Years of Ownership:</label>
             <input type="int" id="yearOfOwnership" name="yearOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
-    
+
+
             <!-- Add Report button -->
             <button type="button" onclick="addReport()">Add Report</button>
             
             <!-- Update button -->
             <button type="submit">Update</button>
         </form>
+            <form id="reportForm" action="/showReport" method="post">
+                <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                <input type="hidden" id="session" name="session" th:value="${session}" required>
+                <button type="submit" class="button">Reports</button>
+            </form>
     </div>
+
     
-    
-    
+
 
     <div>
         <button onclick="goBack()">Back</button>

@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dreamland.api.model.Pet;
-
+import com.example.dreamland.api.model.PetReport;
+import com.example.dreamland.api.model.Report;
 
 @Service
 public class OwnerService {
@@ -226,6 +227,72 @@ public String fosteredPetAbondon(int petId) {
         e.printStackTrace();
         return "Failed to update pet - General error";
     }
+}
+public List<PetReport> getGivenPetsWithReports(int userId) {
+    List<PetReport> petsWithReports = new ArrayList<>();
+
+    String query = "SELECT p.pet_id, p.age, p.type, p.cost, p.breed, p.name, p.year_ownership, r.report_id, r.type, r.description " +
+                   "FROM pet AS p " +
+                   "LEFT JOIN report AS r ON p.pet_id = r.pet_id " +
+                   "where adopter_id is null and foster_id is null and owner_id is not null and owner_id=?";
+
+    try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+        preparedStatement.setInt(1, userId);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                int petId = resultSet.getInt("p.pet_id");
+
+                // Check if there is already a PetReport with the same petId
+                PetReport existingPetReport = findPetReportById(petsWithReports, petId);
+
+                if (existingPetReport == null) {
+                    PetReport petReport = new PetReport();
+                    Pet pet = new Pet();
+                    Report report = new Report();
+                    List<Report> reports = new ArrayList<>();
+
+                    pet.setId(petId);
+                    pet.setAge(resultSet.getInt("p.age"));
+                    pet.setType(resultSet.getString("p.type"));
+                    pet.setAverageExpense(resultSet.getDouble("p.cost"));
+                    pet.setBreed(resultSet.getString("p.breed"));
+                    pet.setName(resultSet.getString("p.name"));
+                    pet.setYearOfOwnership(resultSet.getInt("p.year_ownership"));
+
+                    report.setId(resultSet.getInt("r.report_id"));
+                    report.setDescription(resultSet.getString("r.description"));
+                    report.setType(resultSet.getString("r.type"));
+
+                    reports.add(report);
+                    petReport.setPet(pet);
+                    petReport.setReports(reports);
+
+                    petsWithReports.add(petReport);
+                } else {
+                    Report report = new Report();
+                    report.setId(resultSet.getInt("r.report_id"));
+                    report.setDescription(resultSet.getString("r.description"));
+                    report.setType(resultSet.getString("r.type"));
+
+                    existingPetReport.getReports().add(report);
+                }
+            }
+            return petsWithReports;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+
+private PetReport findPetReportById(List<PetReport> petReports, int petId) {
+    for (PetReport petReport : petReports) {
+        if (petReport.getPet().getId() == petId) {
+            return petReport;
+        }
+    }
+    return null;
 }
 
 }
