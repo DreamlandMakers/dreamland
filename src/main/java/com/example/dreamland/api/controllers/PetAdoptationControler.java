@@ -78,7 +78,9 @@ public class PetAdoptationControler {
     public String listExistingPet(String petId, HttpSession session) {
         
         String responseMessage = ownerService.existingPetAbondon(Integer.parseInt(petId));
-    
+        if(responseMessage.equals("Pet updated")){
+            ownerService.decreaseNumPets(UserService.currentUserID);
+        }
         givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
         session.setAttribute("givenPetReports", givenPetReports);
 
@@ -88,7 +90,9 @@ public class PetAdoptationControler {
     public String listFosteredPet(String petId, HttpSession session) {
         
         String responseMessage = ownerService.fosteredPetAbondon(Integer.parseInt(petId));
-    
+        if(responseMessage.equals("Pet updated")){
+            ownerService.decreaseNumPets(UserService.currentUserID);
+        }
         givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
         session.setAttribute("givenPetReports", givenPetReports);
 
@@ -258,6 +262,7 @@ public String adoptNewPet(String petId, HttpSession session) {
     public String undoGiveAway(String petId, HttpSession session) {
         String responseMessage = ownerService.undoGiving(Integer.parseInt(petId));
         if(responseMessage.equals("Pet resurrected")){
+            ownerService.increaseNumPets(UserService.currentUserID);
             givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
             session.setAttribute("givenPetReports", givenPetReports);
             

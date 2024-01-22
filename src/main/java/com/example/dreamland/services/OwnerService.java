@@ -239,14 +239,14 @@ public String existingPetAbondon(int petId) {
     
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-            decreaseNumPets(resultSet.getInt("owner_id"));
+        int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected>0) {
+            //decreaseNumPets(resultSet.getInt("owner_id"));
             return "Pet updated";
         } else {
             return "Failed to update pet";
         }
-    }} catch (SQLException e) {
+    } catch (SQLException e) {
         // Log the exception or print a more meaningful message
         e.printStackTrace();
         return "Failed to update pet - SQL error";
@@ -262,14 +262,14 @@ public String fosteredPetAbondon(int petId) {
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);
 
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-            decreaseNumPets(resultSet.getInt("owner_id"));
+        int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected>0) {
+            //decreaseNumPets(resultSet.getInt("owner_id"));
             return "Pet updated";
         } else {
             return "Failed to update pet";
         }
-    }} catch (SQLException e) {
+    } catch (SQLException e) {
         // Log the exception or print a more meaningful message
         e.printStackTrace();
         return "Failed to update pet - SQL error";
@@ -347,17 +347,17 @@ private PetReport findPetReportById(List<PetReport> petReports, int petId) {
 }
 
 public String undoGiving(int petId) {
-    String query = "delete from pet where pet_id = ?";
+    String query = "UPDATE pet SET adopter_id = owner_id, foster_id = NULL, owner_id = NULL  WHERE pet_id = ?";
     try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
         preparedStatement.setInt(1, petId);
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-            increaseNumPets(resultSet.getInt("owner_id"));
-            return "Pet resurrected";
+        int rowsAffected = preparedStatement.executeUpdate();	
+
+        if (rowsAffected > 0) {	
+            return "Pet resurrected";	
         } else {
             return "Failed to resurrect pet";
         }
-    } }catch (Exception e) {
+    }catch (Exception e) {
         return e.toString();
     }
 }
