@@ -160,9 +160,21 @@ public class PetAdoptationControler {
     public String fosterPetScreen(HttpSession session) {
         int userId = UserService.currentUserID;
         if (fosterService.isFoster(userId)) {
+
             fosterList = fosterService.getFosterPetList(userId);
 
-            session.setAttribute("fosterList", fosterList);
+            int numofPets=fosterList.size();
+            adoptedPetReports.clear();
+            for(int i =0;i<numofPets;i++){
+            Pet p = fosterList.get(i);
+            int petId=p.getId();
+            PetReport pr=new PetReport();
+            pr.setPet(p);
+            List<Report> r= adopterService.getPetReports(petId);
+            pr.setReports(r);
+            adoptedPetReports.add(pr);
+        }
+            session.setAttribute("fosterList", adoptedPetReports);
             return "fosterPet";
         } else {
             return "becomeFosterFamily";
@@ -209,10 +221,16 @@ public String adoptNewPet(String petId, HttpSession session) {
         int userId=UserService.currentUserID;
         String responseMessage = fosterService.fosterPet(userId, petId);
         if (responseMessage.equals("Pet is forwarded to the foster family")) {
-            fosterList = fosterService.getFosterPetList(userId);
-
-            session.setAttribute("fosterList", fosterList);
-            return "fosterPet";
+            Iterator<PetReport> iterator = adoptedPetReports.iterator();
+            while (iterator.hasNext()) {
+            PetReport petReport = iterator.next();
+            if (petReport.getPet().getId() == Integer.parseInt(petId)) {
+                iterator.remove();
+                break;
+            }
+            
+        }
+        session.setAttribute("fosterList", adoptedPetReports);
         }
         return  "fosterPet";
     }

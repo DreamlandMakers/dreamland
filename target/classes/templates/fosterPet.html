@@ -27,25 +27,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="pet : ${session.fosterList}">
-                    <td th:text="${pet.id}"></td>
-                    <td th:text="${pet.name}"></td>
-                    <td th:text="${pet.age}"></td>
-                    <td th:text="${pet.type}"></td>
-                    <td th:text="${pet.averageExpense}"></td>
-                    <td th:text="${pet.breed}"></td>
-                    <td th:text="${pet.yearOfOwnership}"></td>
+                <tr th:each="petReport : ${session.fosterList}">
+                    <td th:text="${petReport.pet.id}"></td>
+                    <td th:text="${petReport.pet.name}"></td>
+                    <td th:text="${petReport.pet.age}"></td>
+                    <td th:text="${petReport.pet.type}"></td>
+                    <td th:text="${petReport.pet.averageExpense}"></td>
+                    <td th:text="${petReport.pet.breed}"></td>
+                    <td th:text="${petReport.pet.yearOfOwnership}"></td>
                     <td>
-                        <form action="/showReport" method="post">
-                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
-                            <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <input type="hidden" id="prevPage" name="prevPage" value="fosterPet" required>
-                            <button type="submit" class="button">Reports</button>
-                        </form>
+                        <ul>
+                            <li th:each="report : ${petReport.reports}">
+                                <span th:text="${report.type}"></span> - <span th:text="${report.description}"></span>
+                            </li>
+                        </ul>
                     </td>
                     <td>
                         <form action="/fosterNewPet" method="post">
-                            <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
+                            <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
                             <button type="submit" class="button">Foster</button>
                         </form>
