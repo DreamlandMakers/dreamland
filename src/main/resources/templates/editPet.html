@@ -50,8 +50,12 @@
             <input type="int" id="age" name="age" placeholder="" th:value="${pet.age}" />
     
             <!-- Type input -->
-            <label for="type">Type:</label>
-            <input type="text" id="type" name="type" placeholder="" th:value="${pet.type}" />
+            <select id="type" name="type" th:value="${pet.id}" required>
+                <option value="dog" th:selected="${pet.type == 'dog'}">Dog</option>
+                <option value="cat" th:selected="${pet.type == 'cat'}">Cat</option>
+                <option value="bird" th:selected="${pet.type == 'bird'}">Bird</option>
+            </select>
+            
     
             <!-- Cost input -->
             <label for="averageExpense">Cost:</label>
