@@ -85,6 +85,7 @@ public class FosterFamilyService {
                     pet.setAverageExpense(resultSet.getDouble("cost"));
                     pet.setBreed(resultSet.getString("breed"));
                     pet.setName(resultSet.getString("name"));
+                    pet.setYearOfOwnership(resultSet.getInt("year_ownership"));
     
                     petList.add(pet);
                 }
