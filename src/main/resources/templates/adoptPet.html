@@ -13,7 +13,6 @@
         <table class="table" id="adopterTable">
             <thead>
                 <tr>
-                    <th>Pet ID</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Type</th>
@@ -26,7 +25,6 @@
             </thead>
             <tbody>
                 <tr th:each="petReport : ${session.petList}">
-                    <td th:text="${petReport.pet.id}"></td>
                     <td th:text="${petReport.pet.name}"></td>
                     <td th:text="${petReport.pet.age}"></td>
                     <td th:text="${petReport.pet.type}"></td>

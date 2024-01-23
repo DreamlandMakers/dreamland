@@ -15,7 +15,6 @@
         <table class="table" id="fosterTable">
             <thead>
                 <tr>
-                    <th>Pet ID</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Type</th>
@@ -28,7 +27,6 @@
             </thead>
             <tbody>
                 <tr th:each="petReport : ${session.fosterList}">
-                    <td th:text="${petReport.pet.id}"></td>
                     <td th:text="${petReport.pet.name}"></td>
                     <td th:text="${petReport.pet.age}"></td>
                     <td th:text="${petReport.pet.type}"></td>

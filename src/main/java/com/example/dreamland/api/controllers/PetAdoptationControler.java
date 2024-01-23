@@ -92,11 +92,16 @@ public class PetAdoptationControler {
         String responseMessage = ownerService.fosteredPetAbondon(Integer.parseInt(petId));
         if(responseMessage.equals("Pet updated")){
             ownerService.decreaseNumPets(UserService.currentUserID);
+            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
+            session.setAttribute("givenPetReports", givenPetReports);
+            return "givenPets";
+        }else{
+            String alertMessage = "Pet giving failed. " + responseMessage+"'\n'You will be directed to profile page!";
+            String script = String.format("'%s'", alertMessage);
+            session.setAttribute("errorMessage", script);
+            return "unable";
         }
-        givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
-        session.setAttribute("givenPetReports", givenPetReports);
 
-        return "givenPets";
     }
 
     @GetMapping("/listMyPets")
