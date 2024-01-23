@@ -60,14 +60,18 @@ public class AuthenticationControler {
     public String logIn(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) {
 
 
-        userService.logIn(userName, password);
+        String response= userService.logIn(userName, password);
 
-        User currentUser = CurrentUser.getCurrentUser();
+
+        if(response.equals("Login Succesfull")){
+            User currentUser = CurrentUser.getCurrentUser();
 
             // Add the current user to the model
-        session.setAttribute("currentUser", currentUser);
-    
-        return "profile"; // This is the name of your HTML file (without the .html extension) 
+            session.setAttribute("currentUser", currentUser);
+            return "profile";
+        }else{
+            return "login";
+        }
     }
     @GetMapping("/logout")
     public String logOut( HttpSession session) {
