@@ -31,8 +31,7 @@
             var form = document.getElementById("petForm");
             form.insertBefore(reportDiv, form.lastElementChild);
         }
-    </script>
-    <script>
+
         function updateBreedOptions() {
             var typeSelect = document.getElementById('type');
             var breedSelect = document.getElementById('breed');
@@ -70,6 +69,16 @@
                 }
             }
         }
+
+        function validateOwnership() {
+            var yearOfOwnership = document.getElementById('yearOfOwnership').value;
+            var age = document.getElementById('age').value;
+
+            if (parseInt(yearOfOwnership) > parseInt(age)) {
+                alert("Year of Ownership cannot be greater than Age!");
+                document.getElementById('yearOfOwnership').value = ''; // Clear the input
+            }
+        }
     </script>
 </head>
 
@@ -84,18 +93,14 @@
             <input type="text" id="name" name="name" required>
 
             <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required>
+            <input type="number" id="age" name="age" oninput="validateOwnership()" required>
 
             <label for="type">Type:</label>
             <select id="type" name="type" onchange="updateBreedOptions()" required>
-                <option value=""th:disabled="true" selected="true">Please select a type</option>
+                <option value="" th:disabled="true" selected="true">Please select a type</option>
                 <option value="dog">Dog</option>
                 <option value="cat">Cat</option>
                 <option value="bird">Bird</option>
-                <!--<option value="fish">Fish</option>
-                <option value="hamster">Hamster</option>
-                <option value="gecko">Gecko</option>
-                <option value="other">Other</option>-->
             </select>
 
             <label for="averageExpense">Cost:</label>
@@ -103,12 +108,12 @@
 
             <label for="breed">Breed:</label>
             <select id="breed" name="breed" required>
-                <option value=""th:disabled="true" selected="true">Please select a breed</option>
+                <option value="" th:disabled="true" selected="true">Please select a breed</option>
                 <!-- Options will be dynamically added based on selected type -->
             </select>
 
             <label for="yearOfOwnership">Year of Ownership:</label>
-            <input type="number" id="yearOfOwnership" name="yearOfOwnership" required>
+            <input type="number" id="yearOfOwnership" name="yearOfOwnership" oninput="validateOwnership()" required>
 
             <button type="button" onclick="addReport()">Add Report</button>
 
