@@ -25,6 +25,7 @@
 #fosterTable td {
     text-align: center;
     color: #4a884f; /* Dark Green - Darker color for table cell text */
+    font-weight: bold;
 }
 
 #fosterTable tr:nth-child(even) {
@@ -77,6 +78,7 @@
 #adopterTable td {
     text-align: center;
     color: #4682b4; /* Steel Blue - Darker blue color for table cell text */
+    font-weight: bold;
 }
 
 #adopterTable tr:nth-child(even) {
@@ -94,6 +96,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width:200px;
 }
 
 .adopt-button:hover {
@@ -129,6 +132,7 @@
 #givenTable td {
     text-align: center;
     color: #ec4d67; /* Light Pink - Lighter color for table cell text */
+    font-weight: bold;
 }
 
 #givenTable tr:nth-child(even) {
@@ -150,6 +154,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width:200px;
 }
 
 .give-button:hover {
@@ -163,6 +168,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width:200px;
 }
 
 .edit-button:hover {
@@ -198,5 +204,47 @@ button {
 
 select {
     width: 100%;
+}
+
+/* Add this style to your CSS file or style section */
+
+/* Report Table Styles */
+.report-table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+.report-input {
+    padding: 8px;
+    font-size: 14px;
+    color: #b38bff; /* Pastel Purple */
+}
+
+.report-input:hover {
+    border-color: #a870ff; /* Light Purple - Slightly darker on hover */
+}
+
+.report-table th {
+    background-color: #d8c5ff; /* Light Pastel Purple - Header background color */
+    color: #fff;
+    font-weight: bold;
+}
+
+.report-table td {
+    text-align: center;
+    color: #844af0; /* Darker Pastel Purple - Text color for table cells */
+    font-weight: bold;
+}
+
+.report-table tbody tr:nth-child(odd) {
+    background-color: #e1d3ff; /* Lighter shade of pastel purple for even rows */
+}
+
+.report-table tbody tr:nth-child(even) {
+    background-color: #ceb6ff; /* Darker shade of pastel purple for odd rows */
+}
+
+.report-title {
+    color: #6b48ff; /* Dark Pastel Purple - Darker tone for the h1 title */
 }
 
