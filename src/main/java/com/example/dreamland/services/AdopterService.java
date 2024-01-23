@@ -26,7 +26,12 @@ public class AdopterService {
 
     public String adoptPet(int userId, int petId) {
 
-        if (isAdopter(userId) && canAdopt(userId,petId)) {
+        if (!isAdopter(userId)) {
+            return "You cannot adopt this pet, you are not an adopter";
+        }
+        if(canAdopt(userId,petId)){
+            return "You cannot adopt this pet. Possible reasons: not older than 18, not having financial stability for this pet...";
+        }
             String query = "update pet set adopter_id = ? , adoption_date = ?, year_ownership = 0  where pet_id = ? and owner_id != ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
@@ -44,9 +49,6 @@ public class AdopterService {
             } catch (Exception e) {
                 return e.toString();
             }
-        } else {
-            return "Not an adopter";
-        }
     }
 
     private boolean canAdopt(int userId, int petId){

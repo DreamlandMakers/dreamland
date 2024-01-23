@@ -227,9 +227,15 @@ public String adoptNewPet(String petId, HttpSession session) {
         }
 
         session.setAttribute("petList", adoptedPetReports);
+        return "adoptPet";
     }
-
-    return "adoptPet";
+    else{
+        String alertMessage = "Pet adoption failed." + responseMessage;
+        String script = String.format("'%s'", alertMessage);
+        session.setAttribute("errorMessage", script);
+        return "unable";
+    }
+    
 }
 
 
