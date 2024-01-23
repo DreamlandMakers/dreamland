@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Adoptable Pets</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
+    <link rel="stylesheet" href="/styles.css"> <!-- Adjust the path based on your project structure -->
 </head>
 <body>
 
 <div class="container">
-    <h1>Adoptable Pets</h1>
+    <h1 class="adopter-title">Adoptable Pets</h1>
 
     <div th:if="${not #lists.isEmpty(session.petList)}">
-        <table class="table">
+        <table class="table" id="adopterTable">
             <thead>
                 <tr>
                     <th>Pet ID</th>
@@ -44,7 +44,7 @@
                         <form action="/adoptNewPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <button type="submit" class="button">Adopt</button>
+                            <button type="submit" class="adopt-button">Adopt</button>
                         </form>
                         
                     </td>

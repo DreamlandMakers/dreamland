@@ -1,47 +1,42 @@
 /* styles.css */
 
-#myTable {
-    /* Add your specific table styles here */
+/* Foster Table */
+#fosterTable {
     border-collapse: collapse;
-    width: 100%;
+    width: 80%;
 }
 
-.table-input {
+.foster-input {
     padding: 8px;
     font-size: 14px;
-    color: #006400;
+    color: #006400; /* Dark Green */
 }
 
-/* Optional: Hover effect for text inputs */
-.table-input:hover {
-    border-color: #4caf50;
+.foster-input:hover {
+    border-color: #4caf50; /* Same as table header background color, slightly darker on hover */
 }
 
-
-/* Table header styles */
-#myTable th {
-    background-color: #4caf50;
+#fosterTable th {
+    background-color: #4caf50; /* Dark Green - Header background color */
     color: #fff;
     font-weight: bold;
 }
 
-/* Table cell styles */
-#myTable td {
+#fosterTable td {
     text-align: center;
-    color: #4a884f; /* Dark color for table cell text */
+    color: #4a884f; /* Dark Green - Darker color for table cell text */
 }
 
-#myTable tr:nth-child(even) {
+#fosterTable tr:nth-child(even) {
     background-color: #F0FFF0; /* Honeydew - Pastel green for even rows */
 }
 
-#myTable tr:nth-child(odd) {
-    background-color: #90EE90; /* Light Green - Pastel green for odd rows */
+#fosterTable tr:nth-child(odd) {
+    background-color: #90EE90; /* Light Green - Lighter pastel green for odd rows */
 }
 
-
-.give-away-button {
-    background-color: #000; /* Black */
+.foster-button {
+    background-color: #4caf50; /* Dark Green - Button background color */
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -49,12 +44,159 @@
     cursor: pointer;
 }
 
-.give-away-button:hover {
-    background-color: #808080; /* Gray - Slightly darker gray on hover */
+.foster-button:hover {
+    background-color: #45a049; /* Dark Green - Slightly darker on hover */
 }
-
 
 .foster-title {
     color: #006400; /* Dark Green - Darker tone for the h1 title */
+}
+
+/* Adopter Table */
+#adopterTable {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+.adopter-input {
+    padding: 8px;
+    font-size: 14px;
+    color: #87CEEB; /* Sky Blue */
+}
+
+.adopter-input:hover {
+    border-color: #67c0e4; /* Light Blue - Slightly darker on hover */
+}
+
+#adopterTable th {
+    background-color: #67c0e4; /* Sky Blue - Header background color */
+    color: #fff;
+    font-weight: bold;
+}
+
+#adopterTable td {
+    text-align: center;
+    color: #4682b4; /* Steel Blue - Darker blue color for table cell text */
+}
+
+#adopterTable tr:nth-child(even) {
+    background-color: #83e1ee; /* Powder Blue - Light blue for even rows */
+}
+
+#adopterTable tr:nth-child(odd) {
+    background-color: #c5ebf5; /* Light Cyan - Lighter blue for odd rows */
+}
+
+.adopt-button {
+    background-color: #87CEEB; /* Sky Blue - Button background color */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.adopt-button:hover {
+    background-color: #add8e6; /* Light Blue - Slightly darker on hover */
+}
+
+.adopter-title {
+    color: #4eb9e4; /* Sky Blue - Darker tone for the h1 title */
+}
+
+/* Given Table */
+#givenTable {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+.given-input {
+    padding: 8px;
+    font-size: 14px;
+    color: #ec4d67; /* Pastel Pink */
+}
+
+.given-input:hover {
+    border-color: #FFB6C1; /* Light Pink - Slightly darker on hover */
+}
+
+#givenTable th {
+    background-color: #FFC0CB; /* Pastel Pink - Header background color */
+    color: #fff;
+    font-weight: bold;
+}
+
+#givenTable td {
+    text-align: center;
+    color: #ec4d67; /* Light Pink - Lighter color for table cell text */
+}
+
+#givenTable tr:nth-child(even) {
+    background-color: #ffc5dd; /* Peachpuff - Lighter pink for even rows */
+}
+
+#givenTable tr:nth-child(odd) {
+    background-color: #ffe2ed; /* Light Salmon - Lighter pink for odd rows */
+}
+
+.given-title {
+    color: #ec7689; /* Pastel Pink - Darker tone for the h1 title */
+}
+
+.give-button {
+    background-color: #FFA500; /* Orange - Button background color */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.give-button:hover {
+    background-color: #FF8C00; /* Dark Orange - Slightly darker on hover */
+}
+
+.edit-button {
+    background-color: #FFB6C1; /* Light Pink */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #FFC0CB; /* Pink - Slightly darker on hover */
+}
+
+
+/* Back Button Styles */
+.back-button {
+    text-align: center;
+    margin-top: 20px; /* Add margin to create space between the form and back button */
+}
+
+.back-button button {
+    background-color: #c7ba00;
+    color: #fff;
+}
+
+.back-button button:hover {
+    background-color: #cccf01;
+}
+
+
+input,
+select,
+button {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
 }
 

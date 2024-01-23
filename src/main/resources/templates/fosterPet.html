@@ -4,15 +4,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Fosterable Pets</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Fosterable Pets</h1>
+    <h1 class="foster-title">Fosterable Pets</h1>
 
     <div th:if="${not #lists.isEmpty(session.fosterList)}">
-        <table class="table">
+        <table class="table" id="fosterTable">
             <thead>
                 <tr>
                     <th>Pet ID</th>
@@ -46,7 +46,7 @@
                         <form action="/fosterNewPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <button type="submit" class="button">Foster</button>
+                            <button type="submit" class="foster-button">Foster</button>
                         </form>
                         
                     </td>

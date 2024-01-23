@@ -5,6 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Give Away a Pet</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Adjusted flex direction to column */
+        }
+    
+        .form-container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .back-button {
+            text-align: center;
+            margin-top: 20px; /* Add margin to create space between the form and back button */
+        }
+    
+    </style>
+    
+    
     <script>
         function addReport() {
             var reportDiv = document.createElement("div");
@@ -117,7 +157,7 @@
 
             <button type="button" onclick="addReport()">Add Report</button>
 
-            <button type="submit">Give Away</button>
+            <button class="give-button" type="submit">Give Away</button>
         </form>
     </div>
 

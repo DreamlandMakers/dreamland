@@ -2,18 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Adopted Pets</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
+    <link rel="stylesheet" href="/styles.css"> <!-- Adjust the path based on your project structure -->
 </head>
 <body>
 
 <div class="container">
-    <h1>Your Adopted Pets</h1>
+    <h1 class="adopter-title">Your Adopted Pets</h1>
 
     <div th:if="${not #lists.isEmpty(session.adoptedPetReports)}">
-        <table class="table">
+        <table class="table" id="adopterTable">
             <thead>
                 <tr>
-                    <th>Pet ID</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Type</th>
@@ -26,7 +25,6 @@
             </thead>
             <tbody>
                 <tr th:each="petReport : ${session.adoptedPetReports}">
-                    <td th:text="${petReport.pet.id}"></td>
                     <td th:text="${petReport.pet.name}"></td>
                     <td th:text="${petReport.pet.age}"></td>
                     <td th:text="${petReport.pet.type}"></td>
@@ -44,12 +42,12 @@
                         <form action="/editPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <button type="submit" class="button">Edit Pet Info</button>
+                            <button type="submit" class="edit-button">Edit Pet Info</button>
                         </form>
                         <form action="/listExistingPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <button type="submit" class="button">Give Away</button>
+                            <button type="submit" class="give-button">Give Away</button>
                         </form>
                     </td>
                 </tr>
@@ -61,8 +59,8 @@
         <p>There are no adopted pets</p>
     </div>
     
-    <div>
-        <button onclick="goBack()">Back</button>
+    <div >
+        <button type= "button" class="back-button" onclick="goBack()">Back</button>
     </div>
 </div>
 
