@@ -27,7 +27,7 @@ public class AdopterService {
     public String adoptPet(int userId, int petId) {
 
         if (isAdopter(userId) && canAdopt(userId,petId)) {
-            String query = "update pet set adopter_id = ? , adoption_date = ? where pet_id = ? and owner_id != ?";
+            String query = "update pet set adopter_id = ? , adoption_date = ?, year_ownership = 0  where pet_id = ? and owner_id != ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
                 preparedStatement.setString(2, java.time.LocalDate.now().toString());

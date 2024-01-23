@@ -2,18 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Fostered Pets</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Adjust the path based on your project structure -->
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
 </head>
 <body>
 
 <div class="container">
-    <h1>Your Fostered Pets</h1>
+    <h1 class="foster-title" >Your Fostered Pets</h1>
 
     <div th:if="${not #lists.isEmpty(session.fosterList)}">
-        <table class="table">
+        <table class="table" id="myTable">
             <thead>
                 <tr>
-                    <th>Pet ID</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Type</th>
@@ -26,17 +26,16 @@
             </thead>
             <tbody>
                 <tr th:each="petReport : ${session.fosterList}">
-                    <td th:text="${petReport.pet.id}"></td>
-                    <td th:text="${petReport.pet.name}"></td>
-                    <td th:text="${petReport.pet.age}"></td>
-                    <td th:text="${petReport.pet.type}"></td>
-                    <td th:text="${petReport.pet.averageExpense}"></td>
-                    <td th:text="${petReport.pet.breed}"></td>
-                    <td th:text="${petReport.pet.yearOfOwnership}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.name}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.age}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.type}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.averageExpense}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.breed}"></td>
+                    <td type="text" class="table-input" th:text="${petReport.pet.yearOfOwnership}"></td>
                     <td>
                         <ul>
                             <li th:each="report : ${petReport.reports}">
-                                <span th:text="${report.type}"></span> - <span th:text="${report.description}"></span>
+                                <span type="text" class="table-input" th:text="${report.type}"></span> - <span type="text" class="table-input" th:text="${report.description}"></span>
                             </li>
                         </ul>
                     </td>
@@ -44,7 +43,7 @@
                         <form action="/listFosteredPet" method="post">
                             <input type="hidden" id="petId" name="petId" th:value="${petReport.pet.id}" required>
                             <input type="hidden" id="session" name="session" th:value="${session}" required>
-                            <button type="submit" class="button">Give Away</button>
+                            <button type="submit" class="give-away-button">Give Away</button>
                         </form>
                     </td>
                 </tr>

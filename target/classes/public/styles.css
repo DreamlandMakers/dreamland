@@ -1,0 +1,60 @@
+/* styles.css */
+
+#myTable {
+    /* Add your specific table styles here */
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-input {
+    padding: 8px;
+    font-size: 14px;
+    color: #006400;
+}
+
+/* Optional: Hover effect for text inputs */
+.table-input:hover {
+    border-color: #4caf50;
+}
+
+
+/* Table header styles */
+#myTable th {
+    background-color: #4caf50;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Table cell styles */
+#myTable td {
+    text-align: center;
+    color: #4a884f; /* Dark color for table cell text */
+}
+
+#myTable tr:nth-child(even) {
+    background-color: #F0FFF0; /* Honeydew - Pastel green for even rows */
+}
+
+#myTable tr:nth-child(odd) {
+    background-color: #90EE90; /* Light Green - Pastel green for odd rows */
+}
+
+
+.give-away-button {
+    background-color: #000; /* Black */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.give-away-button:hover {
+    background-color: #808080; /* Gray - Slightly darker gray on hover */
+}
+
+
+.foster-title {
+    color: #006400; /* Dark Green - Darker tone for the h1 title */
+}
+
