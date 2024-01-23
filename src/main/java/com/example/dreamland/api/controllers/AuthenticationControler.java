@@ -45,8 +45,14 @@ public class AuthenticationControler {
                      ) {
     // Combine day, month, year into birthDate
     user.setBirthDate(year + "-" + month + "-" + day);
-    userService.newUserSignUp(user);
-    return "result";
+    String response= userService.newUserSignUp(user);
+    if(response.equals("Sign Up Successfull")){
+        user.setBirthDate("Thank you for signing up, login to discover Dream Land!");
+        return "result";
+    }else{
+        user.setBirthDate("You were unable to signup, please try again!");
+        return "result";
+    }
     }
 
 
