@@ -1,62 +1,125 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Profile Page</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: rgb(157, 64, 180);
+            margin-top: 10px;
+            font-weight: bolder;
+            font-size:100px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: small;
+        }
+
+        form {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
+
 <body>
 
     <!-- Access current user properties in your HTML using Thymeleaf -->
     <h1>Welcome, <span th:text="${session.currentUser.name}"></span>!</h1>
-    <p>Surname: <span th:text="${session.currentUser.surName}"></span></p>
-    <div>
-        <form action="/listNewPet" method="get">
+    <h1>    
+
+    </h1>
+    <h2>Do you want to give away a pet of yours that is not enrolled in the dream land?</h2>
+        <div>
             
-            <button type="submit">Give</button>
-
-        </form>
-    </div>
-
-    <div>
-        <form action="/adoptPet" method="get">
-            
-            <button type="submit">Adopt</button>
-
-        </form>
-    </div>
-
-    <div>
-        <form action="/fosterPet" method="get">
-            
-            <button type="submit">Foster</button>
-
-        </form>
-    </div>
-
-    <div>
-        <form action="/listMyPets" method="get">
-            
-            <button type="submit">Given Pets</button>
-
-        </form>
-    </div>
-
-    <div>
-        <form action="/listMyAdoptedPets" method="get">
-            
-            <button type="submit">Adopted Pets</button>
-
-        </form>
-    </div>
-
-    <div>
-        <form action="/listMyFosteredPets" method="get">
-            
-            <button type="submit">Fostered Pets</button>
-
-        </form>
-    </div>
+            <form action="/listNewPet" method="get">
+                <button type="submit"style="background-color: #FFA500; /* Orange - Button background color */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Give</button>
+            </form>
+        </div>
+        <h2>Do you want to adopt a pet?</h2>
+        <div>
+            <form action="/adoptPet" method="get">
+                <button type="submit" style="background-color: #87CEEB; /* Sky Blue - Button background color */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Adopt</button>
+            </form>
+        </div>
+        <h2>Do you want to foster a pet until it finds a new owner?</h2>
+        <div>
+            <form action="/fosterPet" method="get">
+                <button type="submit" style="background-color:  #45a049; /* Dark Green - Button background color */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Foster</button>
+            </form>
+        </div>
+        <h2>Here are the pets you gave away:</h2>
+        <div>
+            <form action="/listMyPets" method="get">
+                <button type="submit"style="background-color: #FFB6C1; /* Light Pink */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Given Pets</button>
+            </form>
+        </div>
+        <h2>Here are the pets you adopted through dream land:</h2>
+        <div>
+            <form action="/listMyAdoptedPets" method="get">
+                <button type="submit"style="background-color:#83e1ee; /* Sky Blue - Button background color */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Adopted Pets</button>
+            </form>
+        </div>
+        <h2>Here are the pets you currently foster through dream land:</h2>
+        <div>
+            <form action="/listMyFosteredPets" method="get">
+                <button type="submit"style="background-color: #4caf50; /* Dark Green - Button background color */
+                color: #fff;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                width:200px;">Fostered Pets</button>
+            </form>
+        </div>
+    
+    
     <!-- Other HTML content -->
 
 </body>
+
 </html>
