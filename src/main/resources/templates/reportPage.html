@@ -48,16 +48,12 @@
         <p>There are no reports for pet</p>
     </div>
 
-    <div>
-        <button style= "background-color: #c7ba00;margin-top: 10px;" onclick="goBack()">Back</button>
+    <div class="back-button">
+        <form action="/profile" method="get">
+            <button type="submit" class="button">Profile</button>
+        </form>
     </div>
 </div>
 
 </body>
 </html>
-
-<script>
-    function goBack() {
-      window.history.back();
-    }
-  </script>
