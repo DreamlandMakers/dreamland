@@ -5,38 +5,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Pet</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Adjusted flex direction to column */
+        }
+
+        .form-container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .report-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* Adjust margin between reports */
+        }
+
+        .report-container input,
+        .report-container select {
+            flex: 1; /* Take remaining width */
+            margin-right: 10px; /* Adjust margin between input/select and delete button */
+        }
+
+        .report-container button {
+            background-color: #d9534f; /* Bootstrap's danger color */
+            color: #fff;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 20px; /* Add margin to create space between the form and back button */
+            background-color: #5bc0de; /* Bootstrap's info color */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+
     <script>
         function addReport() {
             var reportContainer = document.createElement("div");
             reportContainer.classList.add("report-container");
 
-            var typeSelect = document.createElement("input");
-            typeSelect.type = "text";
-            typeSelect.name = "reportTitles";
-            typeSelect.placeholder = "Report Title";
-            typeSelect.required = true;
+            var typeInput = document.createElement("input");
+            typeInput.type = "text";
+            typeInput.name = "reportTitles";
+            typeInput.placeholder = "Report Title";
+            typeInput.required = true;
 
-
-            var titleInput = document.createElement("input");
-            titleInput.type = "text";
-            titleInput.name = "reportDescriptions";
-            titleInput.placeholder = "Report Description";
-            titleInput.required = true;
+            var descriptionInput = document.createElement("input");
+            descriptionInput.type = "text";
+            descriptionInput.name = "reportDescriptions";
+            descriptionInput.placeholder = "Report Description";
+            descriptionInput.required = true;
 
             var deleteButton = document.createElement("button");
             deleteButton.type = "button";
             deleteButton.textContent = "Delete";
-            deleteButton.addEventListener("click", function() {
+            deleteButton.addEventListener("click", function () {
                 reportContainer.remove();
             });
 
-            reportContainer.appendChild(typeSelect);
-            reportContainer.appendChild(titleInput);
+            reportContainer.appendChild(typeInput);
+            reportContainer.appendChild(descriptionInput);
             reportContainer.appendChild(deleteButton);
 
             var form = document.getElementById("petForm");
             form.insertBefore(reportContainer, form.lastElementChild);
         }
+
         function updateBreedOptions() {
             var typeSelect = document.getElementById('type');
             var breedSelect = document.getElementById('breed');
@@ -64,7 +129,7 @@
                 var option = document.createElement('option');
                 option.value = breeds[i];
                 option.text = breeds[i];
-                
+
                 // Set selected attribute if the breed matches the selected breed
                 option.selected = breeds[i] === selectedBreed;
 
@@ -72,74 +137,75 @@
             }
         }
     </script>
-
 </head>
 
-<body >
+<body>
     <h1>Edit Pet</h1>
     <div th:each="pet : ${session.pet}">
         <!-- Form to take inputs for a new pet -->
-        <form id="petForm" action="/updatePet" method="post">
+        <div class="form-container">
+            <form id="petForm" action="/updatePet" method="post">
 
-            <input type="hidden" id="id" name="id" placeholder="" th:value="${pet.id}" />
-            <!-- Name input -->
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="" th:value="${pet.name}" />
-    
-            <!-- Age input -->
-            <label for="age">Age:</label>
-            <input type="int" id="age" name="age" placeholder="" th:value="${pet.age}" />
-    
-            <!-- Type input -->
-            <label for="type">Type:</label>
-            <select id="type" name="type" th:value="${pet.type}" onchange="updateBreedOptions()"  required>
-                <option value="dog" th:selected="${pet.type == 'dog'}">Dog</option>
-                <option value="cat" th:selected="${pet.type == 'cat'}">Cat</option>
-                <option value="bird" th:selected="${pet.type == 'bird'}">Bird</option>
-                <!--<option value="other" th:selected="${pet.type == 'other'}">Other</option>-->
-            </select>
-            
-    
-            <!-- Cost input -->
-            <label for="averageExpense">Cost:</label>
-            <input type="double" id="averageExpense" name="averageExpense" placeholder="" th:value="${pet.averageExpense}" />
-    
-            <!-- Breed input -->
-            <label for="breed">Breed:</label>
-            <select id="breed" name="breed" th:value="${pet.breed}" onclick="updateBreedOptions()" required>
-                <option th:value="${pet.breed}" th:text="${pet.breed}"></option>
+                <input type="hidden" id="id" name="id" th:value="${pet.id}" />
+                <!-- Name input -->
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" th:value="${pet.name}" />
 
-            </select>
-            
-            <!-- Years of Ownership input -->
-            <label for="yearOfOwnership">Years of Ownership:</label>
-            <input type="int" id="yearOfOwnership" name="yearOfOwnership" placeholder="" th:value="${pet.yearOfOwnership}" />
+                <!-- Age input -->
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" th:value="${pet.age}" />
 
+                <!-- Type input -->
+                <label for="type">Type:</label>
+                <select id="type" name="type" onchange="updateBreedOptions()" required>
+                    <option value="dog" th:selected="${pet.type == 'dog'}">Dog</option>
+                    <option value="cat" th:selected="${pet.type == 'cat'}">Cat</option>
+                    <option value="bird" th:selected="${pet.type == 'bird'}">Bird</option>
+                </select>
 
-            <!-- Add Report button -->
-            <button type="button" onclick="addReport()">Add Report</button>
-            
-            <!-- Update button -->
-            <button type="submit">Update</button>
-        </form>
+                <!-- Cost input -->
+                <label for="averageExpense">Cost:</label>
+                <input type="number" id="averageExpense" name="averageExpense" th:value="${pet.averageExpense}" />
+
+                <!-- Breed input -->
+                <label for="breed">Breed:</label>
+                <select id="breed" name="breed" th:value="${pet.breed}" onclick="updateBreedOptions()" required>
+                    <option th:value="${pet.breed}" th:text="${pet.breed}"></option>
+                </select>
+
+                <!-- Years of Ownership input -->
+                <label for="yearOfOwnership">Years of Ownership:</label>
+                <input type="number" id="yearOfOwnership" name="yearOfOwnership" th:value="${pet.yearOfOwnership}" />
+
+                <!-- Reports button -->
+                <button type="button" onclick="goToReports()" style="background-color: rgba(212, 0, 255, 0.555); margin-top: 10px;height:25px;">Existing Reports</button>
+
+                <!-- Add Report button -->
+                <button type="button" onclick="addReport()" style="background-color: rgb(157, 64, 180); margin-top: 10px;height:25px;">Add Report</button>
+
+                <!-- Update button -->
+                <button type="submit"style="background-color: orange; margin-top: 10px;height:30px;">Update</button>
+
+                <button onclick="goBack()" style="background-color: #c7ba00; margin-top: 10px;height:30px;" >Back</button>
+            </form>
             <form id="reportForm" action="/showReport" method="post">
                 <input type="hidden" id="petId" name="petId" th:value="${pet.id}" required>
                 <input type="hidden" id="session" name="session" th:value="${session}" required>
-                <button type="submit" class="button">Reports</button>
             </form>
+        </div>
     </div>
 
-    
 
 
-    <div>
-        <button class="back-button" onclick="goBack()">Back</button>
-    </div>
-</body>
-
-</html>
-<script>
+    <script>
     function goBack() {
-      window.history.back();
+            window.history.back();
+        }
+            function goToReports() {
+        // Submit the form
+        document.getElementById('reportForm').submit();
     }
-</script>
+
+    </script>
+</body>
+</html>
