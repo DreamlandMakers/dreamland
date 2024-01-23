@@ -36,6 +36,26 @@
             display: flex;
             flex-direction: column;
         }
+
+        .report-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* Adjust margin between reports */
+        }
+
+        .report-container input {
+            flex: 1; /* Take remaining width */
+            margin-right: 10px; /* Adjust margin between input and delete button */
+        }
+
+        .report-container button {
+            background-color: #d9534f; /* Bootstrap's danger color */
+            color: #fff;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     
         .back-button {
             text-align: center;
@@ -47,29 +67,35 @@
     
     <script>
         function addReport() {
-            var reportDiv = document.createElement("div");
-            
-            var titleLabel = document.createElement("label");
-            titleLabel.textContent = "Report Title:";
+            var reportContainer = document.createElement("div");
+            reportContainer.classList.add("report-container");
+
+            var typeSelect = document.createElement("input");
+            typeSelect.type = "text";
+            typeSelect.name = "reportTitles";
+            typeSelect.placeholder = "Report Title";
+            typeSelect.required = true;
+
+
             var titleInput = document.createElement("input");
             titleInput.type = "text";
-            titleInput.name = "reportTitles";
+            titleInput.name = "reportDescriptions";
+            titleInput.placeholder = "Report Description";
             titleInput.required = true;
 
-            var descriptionLabel = document.createElement("label");
-            descriptionLabel.textContent = "Report Description:";
-            var descriptionInput = document.createElement("input");
-            descriptionInput.type = "text";
-            descriptionInput.name = "reportDescriptions";
-            descriptionInput.required = true;
+            var deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function() {
+                reportContainer.remove();
+            });
 
-            reportDiv.appendChild(titleLabel);
-            reportDiv.appendChild(titleInput);
-            reportDiv.appendChild(descriptionLabel);
-            reportDiv.appendChild(descriptionInput);
+            reportContainer.appendChild(typeSelect);
+            reportContainer.appendChild(titleInput);
+            reportContainer.appendChild(deleteButton);
 
             var form = document.getElementById("petForm");
-            form.insertBefore(reportDiv, form.lastElementChild);
+            form.insertBefore(reportContainer, form.lastElementChild);
         }
 
         function updateBreedOptions() {

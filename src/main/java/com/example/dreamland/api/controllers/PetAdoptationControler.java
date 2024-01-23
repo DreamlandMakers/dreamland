@@ -147,7 +147,7 @@ public class PetAdoptationControler {
     public String adoptPetScreen(HttpSession session) {
         if (adopterService.isAdopter(UserService.currentUserID)) {
             
-            petList = adopterService.getAdoptablePetList();
+            petList = adopterService.getAdoptablePetList(UserService.currentUserID);
             int numofPets=petList.size();
             adoptedPetReports.clear();
             for(int i =0;i<numofPets;i++){

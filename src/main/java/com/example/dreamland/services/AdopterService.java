@@ -79,9 +79,10 @@ public class AdopterService {
         }
     }
 
-    public List<Pet> getAdoptablePetList() {
-        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null";
+    public List<Pet> getAdoptablePetList(int userId) {
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null and owner_id != ?";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Pet> petList = new ArrayList<>();
                 while (resultSet.next()) {

@@ -71,7 +71,7 @@ public class FosterFamilyService {
     }
 
     public List<Pet> getFosterPetList(int userId) {
-        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null and foster_id is null and type in (Select type from foster where id=?)";
+        String query = "select pet_id, age, type, cost, breed, name, year_ownership from pet where adopter_id is null and foster_id is null and owner_id != ? and type in (Select type from foster where id=owner_id) ";
         try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
             preparedStatement.setInt(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {   
