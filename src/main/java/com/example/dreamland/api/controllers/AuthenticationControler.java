@@ -69,5 +69,15 @@ public class AuthenticationControler {
     
         return "profile"; // This is the name of your HTML file (without the .html extension) 
     }
+    @GetMapping("/logout")
+    public String logOut( HttpSession session) {
+        
+
+        CurrentUser.setCurrentUser(new User());
+        session=null;
+            // Add the current user to the model
+    
+        return "login"; // This is the name of your HTML file (without the .html extension) 
+    }
 }
 
