@@ -29,7 +29,7 @@ public class AdopterService {
         if (!isAdopter(userId)) {
             return "You cannot adopt this pet, you are not an adopter";
         }
-        if(canAdopt(userId,petId)){
+        if(!canAdopt(userId,petId)){
             return "You cannot adopt this pet. Possible reasons: not older than 18, not having financial stability for this pet...";
         }
             String query = "update pet set adopter_id = ? , adoption_date = ?, year_ownership = 0  where pet_id = ? and owner_id != ?";

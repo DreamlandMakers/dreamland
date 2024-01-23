@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column; /* Add this line for a column layout */
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -32,6 +33,10 @@
         p {
             color: #333;
         }
+
+        .back-button {
+            margin-top: 20px; /* Add margin to separate the button from the error container */
+        }
     </style>
 </head>
 
@@ -39,6 +44,12 @@
     <div class="error-container">
         <h1>Error</h1>
         <p th:if="${session.errorMessage}" th:text="${session.errorMessage}"></p>
+    </div>
+    
+    <div class="back-button">
+        <form action="/profile" method="get">
+            <button type="submit" class="button">OK</button>
+        </form>
     </div>
 </body>
 

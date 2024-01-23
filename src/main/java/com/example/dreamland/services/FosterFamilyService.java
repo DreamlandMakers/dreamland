@@ -23,7 +23,12 @@ public class FosterFamilyService {
     }
 
     public String fosterPet(int userId, int petId) {
-        if (isFoster(userId)&canFoster(userId,petId)) {
+        if (!isFoster(userId)) {
+            return "You cannot foster this pet, you are not a registered foster";
+        }
+        if(!canFoster(userId,petId)){
+            return "You cannot foster this pet. Possible reasons: not older than 18, not having financial stability for this pet...";
+        }
             String query = "update pet set foster_id = ? , foster_from_date = ? where pet_id = ?";
             try (PreparedStatement preparedStatement = databaseConnection.prepareStatement(query)) {
                 preparedStatement.setInt(1, userId);
@@ -40,9 +45,6 @@ public class FosterFamilyService {
             } catch (Exception e) {
                 return e.toString();
             }
-        } else {
-            return "Not a foster family member";
-        }
     }
 
     public String newFosterRegister(int userId, double salary, String type) {

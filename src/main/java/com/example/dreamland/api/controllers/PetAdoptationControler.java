@@ -51,10 +51,10 @@ public class PetAdoptationControler {
     public String listYourPet(Pet pet, String[] reportTitles, String[] reportDescriptions, HttpSession session) {
         if(ownerService.getNumPets(UserService.currentUserID) <=0){
             //you cant give more than the pets you own
-            givenPetReports= ownerService.getGivenPetsWithReports(UserService.currentUserID);
-            session.setAttribute("givenPetReports", givenPetReports);
-    
-            return "givenPets";
+                String alertMessage = "Pet giving failed." + "You dont have any pets to give." +"'\n'You will be directed to profile page!";
+                String script = String.format("'%s'", alertMessage);
+                session.setAttribute("errorMessage", script);
+                return "unable";
         }
 
         int petId = ownerService.newPetRegister(pet);
@@ -230,7 +230,7 @@ public String adoptNewPet(String petId, HttpSession session) {
         return "adoptPet";
     }
     else{
-        String alertMessage = "Pet adoption failed." + responseMessage;
+        String alertMessage = "Pet adoption failed." + responseMessage +"'\n'You will be directed to profile page!";
         String script = String.format("'%s'", alertMessage);
         session.setAttribute("errorMessage", script);
         return "unable";
@@ -261,8 +261,14 @@ public String adoptNewPet(String petId, HttpSession session) {
             
         }
         session.setAttribute("fosterList", adoptedPetReports);
-        }
         return  "fosterPet";
+        }else{
+            String alertMessage = "Pet fostering failed." + responseMessage +"'\n'You will be directed to profile page!";
+            String script = String.format("'%s'", alertMessage);
+            session.setAttribute("errorMessage", script);
+            return "unable";
+        }
+        
     }
     @PostMapping("/undoGiveAway") //When a user adopts a new pet calls this endpoint with the petid as a json body
     public String undoGiveAway(String petId, HttpSession session) {
